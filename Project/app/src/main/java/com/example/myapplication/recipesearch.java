@@ -14,39 +14,65 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Random;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class recipesearch extends AppCompatActivity {
-
-    // Define the ArrayList of recipes
     private ArrayList<String> recipes = new ArrayList<>();
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipesearch);
+        // Load the recipes data from the JSON file
+        // json url: https://github.com/sami9644/Food-recipes-json-file/blob/main/recipes.json
 
-        // Add some recipes to the ArrayList
-        recipes.add("Chicken Soup: Ingredients - chicken, salt, water. Directions - mix them together and boil.");
-        recipes.add("Vegetable Salad: Ingredients - lettuce, tomato, cucumber. Directions - chop and mix them together.");
-        recipes.add("Fruit Salad: Ingredients - apple, banana, orange. Directions - slice and mix them together.");
-        recipes.add("Pasta Bolognese: Ingredients - pasta, ground beef, tomato sauce. Directions - cook pasta and ground beef separately, then mix with tomato sauce.");
-        recipes.add("Cheese Pizza: Ingredients - pizza dough, tomato sauce, mozzarella cheese. Directions - spread tomato sauce and cheese on dough, then bake.");
-        recipes.add("Beef Tacos: Ingredients - taco shells, ground beef, lettuce, tomato, cheese. Directions - cook beef, then assemble tacos with beef and toppings.");
-        recipes.add("Chicken Stir Fry: Ingredients - chicken, bell peppers, soy sauce. Directions - stir fry chicken and bell peppers, then add soy sauce.");
-        recipes.add("Veggie Burger: Ingredients - veggie patty, bun, lettuce, tomato. Directions - cook veggie patty, then assemble burger with patty and toppings.");
-        recipes.add("Fish and Chips: Ingredients - fish, potatoes, oil. Directions - fry fish and chips separately, then serve together.");
-        recipes.add("Mushroom Risotto: Ingredients - arborio rice, mushrooms, chicken broth. Directions - cook rice and mushrooms separately, then mix with broth.");
-        recipes.add("Tomato Soup: Ingredients - tomatoes, salt, cream. Directions - blend tomatoes, then heat with salt and cream.");
-        recipes.add("Apple Pie: Ingredients - apples, sugar, pie crust. Directions - mix apples and sugar, then bake in pie crust.");
-        recipes.add("Chocolate Cake: Ingredients - flour, sugar, cocoa powder, eggs. Directions - mix ingredients and bake.");
-        recipes.add("Grilled Cheese Sandwich: Ingredients - bread, cheese, butter. Directions - butter bread, place cheese between slices, grill until golden.");
-        recipes.add("Pancakes: Ingredients - flour, eggs, milk. Directions - mix ingredients, pour onto hot griddle, flip when bubbles form.");
-        recipes.add("Scrambled Eggs: Ingredients - eggs, milk, butter. Directions - whisk eggs and milk, cook in buttered pan, stirring frequently.");
-        recipes.add("Spaghetti Carbonara: Ingredients - spaghetti, eggs, bacon, parmesan cheese. Directions - cook spaghetti and bacon separately, mix with beaten eggs and cheese.");
-        recipes.add("Roast Chicken: Ingredients - chicken, salt, pepper, olive oil. Directions - season chicken, roast in oven until cooked through.");
-        recipes.add("Beef Stew: Ingredients - beef, potatoes, carrots, onions, beef broth. Directions - brown beef, add vegetables and broth, simmer until tender.");
-        // Get the EditText, Button, and TextView from the layout
+
+        try {
+            String json = loadJSONFromAsset("recipe1.json");
+            JSONArray jsonArray = new JSONArray(json);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String name = jsonObject.getString("Name");
+                JSONArray ingredientsArray = jsonObject.getJSONArray("Ingredients");
+                String ingredients = ingredientsArray.join(", ");
+                JSONArray methodArray = jsonObject.getJSONArray("Method");
+                String method = methodArray.join(". ");
+                String recipe = name + ": \n\nIngredients - " + ingredients + ". \n\nDirections - " + method + ".";
+                recipes.add(recipe);
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Load the recipes data from the csv file
+        // csv url: https://www.kaggle.com/datasets/thedevastator/better-recipes-for-a-better-life
+        try {
+            InputStream is = getAssets().open("recipe2 modi.csv");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            String line;
+            reader.readLine(); // Skip the header line
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split("\",\""); // Split by quotes and commas
+                if (data.length >= 3) { // Check if all needed data is present
+                    String name = data[0].replaceAll("^\"|\"$", ""); // Remove the enclosing double quotes
+                    String ingredients = data[1].replaceAll("^\"|\"$", ""); // Remove the enclosing double quotes
+                    String method = data[2].replaceAll("^\"|\"$", ""); // Remove the enclosing double quotes
+                    String recipe = name + ": \n\nIngredients - " + ingredients + ". \n\nDirections - " + method + ".";
+                    recipes.add(recipe);
+                }
+            }
+            is.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         EditText ingredientEditText = findViewById(R.id.ingredientEditText);
         Button button = findViewById(R.id.button);
         TextView recipeTextView = findViewById(R.id.recipeTextView);
@@ -61,24 +87,47 @@ public class recipesearch extends AppCompatActivity {
                 // Get the recipes with the entered ingredient
                 List<String> filteredRecipes = getRecipesWithIngredient(ingredient);
 
-                // Display the first recipe in the TextView
+                // Display the recipes in the TextView
                 if (!filteredRecipes.isEmpty()) {
-                    recipeTextView.setText(filteredRecipes.get(0));
+                    //recipeTextView.setText(filteredRecipes.get(0)); // can get random recipe below
+                    Random random = new Random();
+                    int randomIndex = random.nextInt(filteredRecipes.size());
+                    recipeTextView.setText(filteredRecipes.get(randomIndex));
+
                 } else {
                     recipeTextView.setText("No recipes found with the entered ingredient.");
                 }
             }
         });
+
     }
 
-    // Method to get recipes with a certain ingredient
+
+
     private List<String> getRecipesWithIngredient(String ingredient) {
         List<String> filteredRecipes = new ArrayList<>();
         for (String recipe : recipes) {
-            if (recipe.contains(ingredient)) {
+            if (recipe.toLowerCase().contains(ingredient.toLowerCase())) {
                 filteredRecipes.add(recipe);
             }
         }
         return filteredRecipes;
+    }
+
+    // Method to load JSON from asset
+    private String loadJSONFromAsset(String filename) {
+        String json = null;
+        try {
+            InputStream is = getAssets().open(filename);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
     }
 }
