@@ -7,18 +7,24 @@ public class Recipe {
     private String link;
     private String source;
     private String ner;
+    private String expireDate; // 新添加的过期日期属性
+    private int userId; // 新添加的用户编号属性
 
     public Recipe() {
     }
 
-    public Recipe(String title, String ingredients, String directions, String link, String source, String ner) {
+    public Recipe(String title, String ingredients, String directions, String link, String source, String ner, String expireDate, int userId) {
         this.title = title;
         this.ingredients = ingredients;
         this.directions = directions;
         this.link = link;
         this.source = source;
         this.ner = ner;
+        this.expireDate = expireDate;
+        this.userId = userId;
     }
+
+
 
     // Getter methods
     public String getTitle() {
@@ -43,6 +49,14 @@ public class Recipe {
 
     public String getNer() {
         return ner;
+    }
+
+    public String getExpireDate() {
+        return expireDate;
+    }
+
+    public int getUserId() {
+        return userId;
     }
 
     // Setter methods
@@ -70,6 +84,14 @@ public class Recipe {
         this.ner = ner;
     }
 
+    public void setExpireDate(String expireDate) {
+        this.expireDate = expireDate;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
     @Override
     public String toString() {
         return "Title: " + title + "\n" +
@@ -77,6 +99,8 @@ public class Recipe {
                 "Directions: " + directions + "\n" +
                 "Link: " + link + "\n" +
                 "Source: " + source + "\n" +
-                "NER: " + ner + "\n";
+                "NER: " + ner + "\n" +
+                "Expire Date: " + expireDate + "\n" +
+                "User ID: " + userId + "\n";
     }
 }
