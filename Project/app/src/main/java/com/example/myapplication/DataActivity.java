@@ -1,72 +1,82 @@
 package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.myapplication.Recipe;
+import com.example.myapplication.FileHelper;
 
-import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 
 public class DataActivity extends AppCompatActivity {
 
     private static final String TAG = "DataActivity";
-    private List<Recipe> recipes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data);
 
-        recipes = new ArrayList<>();
-        loadRecipesFromCSV(); // Load Dataset
-
-        // Display of loaded data
-        for (Recipe recipe : recipes) {
-            Log.d(TAG, recipe.toString());
-        }
-
-        Button modifyButton = findViewById(R.id.modify_button);
-        modifyButton.setOnClickListener(new View.OnClickListener() {
+        Button addButton = findViewById(R.id.add_button);
+        addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                addRecipe("Potato", "2024-04-30", 1); // 示例数据
+            }
+        });
 
-                if (!recipes.isEmpty()) {
-                    Recipe firstRecipe = recipes.get(0);
-                    firstRecipe.setTitle("Modified Title");
-                    Log.d(TAG, "Modified Recipe: " + firstRecipe.toString());
-                }
+        Button displayButton = findViewById(R.id.display_button);
+        displayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayRecipesForUser(1); // 示例用户编号
             }
         });
     }
 
-    private void loadRecipesFromCSV() {
-        InputStream inputStream = getResources().openRawResource(R.raw.recipes); // The dataset files are in the res/raw folder.
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        String line;
+    private void addRecipe(String recipeName, String expireDate, int userId) {
+        String entry = recipeName + "," + expireDate + "," + userId;
+        writeEntryToDataset(entry);
+    }
+
+    private void writeEntryToDataset(String entry) {
+        File file = new File(getFilesDir(), "dataset.csv");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
+            writer.write(entry);
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void displayRecipesForUser(int userId) {
+        File file = new File(getFilesDir(), "dataset.csv");
+        if (!file.exists()) {
+            Log.d(TAG, "Dataset file not found");
+            return;
+        }
+
         try {
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",", -1);
-                Recipe recipe = new Recipe(parts[0], parts[1], parts[2], parts[3], parts[4], parts[5]);
-                recipes.add(recipe);
+            // 读取数据集文件中的内容，并显示对应用户编号的菜谱信息
+            String[] lines = FileHelper.readFileLines(file);
+            for (String line : lines) {
+                String[] parts = line.split(",");
+                if (parts.length >= 3) {
+                    int user = Integer.parseInt(parts[2].trim());
+                    if (user == userId) {
+                        String recipeName = parts[0].trim();
+                        String expireDate = parts[1].trim();
+                        Log.d(TAG, "Recipe for user " + userId + ": " + recipeName + ", " + expireDate);
+                    }
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                inputStream.close();
-                reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 }
