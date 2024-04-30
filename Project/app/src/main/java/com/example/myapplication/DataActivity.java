@@ -26,7 +26,7 @@ public class DataActivity extends AppCompatActivity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addRecipe("Potato", "2024-04-30", 1); // 示例数据
+                addRecipe("Potato", "2024-04-30", 1); // example
             }
         });
 
@@ -34,7 +34,7 @@ public class DataActivity extends AppCompatActivity {
         displayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                displayRecipesForUser(1); // 示例用户编号
+                displayRecipesForUser(1); // user number
             }
         });
     }
@@ -62,7 +62,7 @@ public class DataActivity extends AppCompatActivity {
         }
 
         try {
-            // 读取数据集文件中的内容，并显示对应用户编号的菜谱信息
+            // read from dataset
             String[] lines = FileHelper.readFileLines(file);
             for (String line : lines) {
                 String[] parts = line.split(",");
