@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.apache.commons.text.similarity.LevenshteinDistance;
 
 public class recipesearch extends AppCompatActivity {
     private ArrayList<String> recipes = new ArrayList<>();
@@ -106,13 +107,21 @@ public class recipesearch extends AppCompatActivity {
 
     private List<String> getRecipesWithIngredient(String ingredient) {
         List<String> filteredRecipes = new ArrayList<>();
+        String ingredientLowerCase = ingredient.toLowerCase();
+        LevenshteinDistance distance = LevenshteinDistance.getDefaultInstance();
+
         for (String recipe : recipes) {
-            if (recipe.toLowerCase().contains(ingredient.toLowerCase())) {
+            String recipeLowerCase = recipe.toLowerCase();
+            int levenshteinDistance = distance.apply(ingredientLowerCase, recipeLowerCase);
+            if (levenshteinDistance <= 2) {
                 filteredRecipes.add(recipe);
             }
         }
         return filteredRecipes;
     }
+}
+
+
 
     // Method to load JSON from asset
     private String loadJSONFromAsset(String filename) {
