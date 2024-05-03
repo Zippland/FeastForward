@@ -111,7 +111,7 @@ public class recipesearch extends AppCompatActivity {
             // Calculate the similarity between the recipe name and the target ingredient
             double similarity = calculateSimilarity(recipe.toLowerCase(), ingredientLowerCase);
             // If similarity reaches threshold, add recipe to results
-            if (similarity >= 0.6) { //可以换
+            if (similarity >= 0.6) { // can change
                 filteredRecipes.add(recipe);
             }
         }
