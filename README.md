@@ -1,4 +1,4 @@
-# FeastForward
+# FeastForward ![FeastForward Logo](media/logo.png)
 
 ## Overview
 FeastForward is an Android application designed to bridge the gap between food surplus and scarcity by facilitating the donation and distribution of food. Our app ensures that excess food reaches those who need it most, supports users in checking the expiration of food items, and helps in discovering new recipes to transform leftover ingredients into delicious meals.
@@ -7,6 +7,15 @@ FeastForward is an Android application designed to bridge the gap between food s
 - **Food Donation and Collection:** Connects donors with local food banks and community centers to ensure smooth transfer of excess food.
 - **Expiration Tracker:** Scans and tracks the expiration dates of food items to minimize waste.
 - **Recipe Finder:** Suggests recipes based on the ingredients available, helping you make the most of your kitchen supplies.
+
+## App Interface
+The FeastForward app is user-friendly with several key sections:
+- **Login Page:**  Secure login with username and password login or quick entry through social media platforms.
+[login page](media/login.png)
+- **Home Dashboard:** Quick access to main features such as donation, tracking, and recipe suggestions.
+- **Donation Hub:** Easily navigate through local donation opportunities and schedule pickups or deliveries.
+- **Expiration Tracking Page:** Use the camera to scan food items and automatically record their expiration dates.
+- **Recipe Suggestions:** Enter your available ingredients and get tailored recipes to make delicious meals.
 
 ## Getting Started
 To get a local copy up and running, follow these simple steps:
