@@ -1,8 +1,10 @@
 package com.example.myapplication;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +22,9 @@ public class MainActivity extends AppCompatActivity {
         final Button loginButton = findViewById(R.id.loginButton);
         final TextView forgotPassword = findViewById(R.id.forgotPassword);
         final Button signUpButton = findViewById(R.id.signUpButton);
+        ImageButton facebookLoginButton = findViewById(R.id.facebookLoginButton);
+        ImageButton googleLoginButton = findViewById(R.id.googleLoginButton);
+        ImageButton twitterLoginButton = findViewById(R.id.twitterLoginButton);
 
         // Set up listeners
         loginButton.setOnClickListener(v -> {
@@ -42,6 +47,18 @@ public class MainActivity extends AppCompatActivity {
             // Handle sign up click
             Toast.makeText(MainActivity.this, "Sign up feature not implemented yet.", Toast.LENGTH_SHORT).show();
         });
+
+        // Handle third-party sign up click
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle sign up click
+                Toast.makeText(MainActivity.this, "Third-party sign up feature not implemented yet.", Toast.LENGTH_SHORT).show();
+            }
+        };
+        facebookLoginButton.setOnClickListener(listener);
+        googleLoginButton.setOnClickListener(listener);
+        twitterLoginButton.setOnClickListener(listener);
     }
 
     private boolean checkCredentials(String username, String password) {
