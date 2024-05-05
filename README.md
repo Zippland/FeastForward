@@ -1,4 +1,4 @@
-# FeastForward ![FeastForward Logo](media/logo.png)
+# FeastForward <img src="https://example.com/feastforward_logo.png" alt="FeastForward Logo" width="100">
 
 ## Overview
 FeastForward is an Android application designed to bridge the gap between food surplus and scarcity by facilitating the donation and distribution of food. Our app ensures that excess food reaches those who need it most, supports users in checking the expiration of food items, and helps in discovering new recipes to transform leftover ingredients into delicious meals.
