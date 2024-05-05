@@ -17,6 +17,9 @@ To get a local copy up and running, follow these simple steps:
 
 ### Installation
 1. Clone the repository:
+   ```bash
+   git clone https://gitlab.cecs.anu.edu.au/u7705332/gp-24s1.git
+   ```
 2. Open the project in Android Studio.
 3. Build the project to download all dependencies.
 4. Run the application on an emulator or physical device.
