@@ -7,4 +7,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="primary_text">#DE000000</color> <!-- 主文本颜色 -->
+    <color name="secondary_text">#89000000</color> <!-- 次级文本颜色 -->
+    <color name="tertiary_text">#61000000</color> <!-- 第三级文本颜色 -->
 </resources>

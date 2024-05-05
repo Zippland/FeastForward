@@ -1,0 +1,4 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#FF3700B3"/> <!-- 较深的紫色 -->
+    <corners android:radius="8dp"/>
+</shape>
