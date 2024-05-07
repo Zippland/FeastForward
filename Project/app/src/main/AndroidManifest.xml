@@ -16,7 +16,7 @@
             android:name=".DataActivity"
             android:exported="true" />
         <activity
-            android:name=".recipesearch"
+            android:name=".RecipeSearch"
             android:exported="true" />
         <activity
             android:name=".ExpiredFoodAlert"
