@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,7 +35,6 @@ public class recipesearch extends AppCompatActivity {
         // Load the recipes data from the JSON file
         // json url: https://github.com/sami9644/Food-recipes-json-file/blob/main/recipes.json
 
-
         try {
             String json = loadJSONFromAsset("recipe1.json");
             JSONArray jsonArray = new JSONArray(json);
@@ -42,9 +42,9 @@ public class recipesearch extends AppCompatActivity {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 String name = jsonObject.getString("Name");
                 JSONArray ingredientsArray = jsonObject.getJSONArray("Ingredients");
-                String ingredients = ingredientsArray.join(", ");
+                String ingredients = ingredientsArray.join("\n");
                 JSONArray methodArray = jsonObject.getJSONArray("Method");
-                String method = methodArray.join(". ");
+                String method = methodArray.join("\n");
                 String recipe = name + ": \n\nIngredients - " + ingredients + ". \n\nDirections - " + method + ".";
                 recipes.add(recipe);
 
@@ -53,20 +53,39 @@ public class recipesearch extends AppCompatActivity {
             e.printStackTrace();
         }
 
+
+
         // Load the recipes data from the csv file
         // csv url: https://www.kaggle.com/datasets/thedevastator/better-recipes-for-a-better-life
         try {
-            InputStream is = getAssets().open("recipe2 modi.csv");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-            String line;
+            InputStream is = getAssets().open("recipe2m.csv");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+            //BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+
             reader.readLine(); // Skip the header line
+
+            String line;
             while ((line = reader.readLine()) != null) {
-                String[] data = line.split("\",\""); // Split by quotes and commas
-                if (data.length >= 3) { // Check if all needed data is present
-                    String name = data[0].replaceAll("^\"|\"$", ""); // Remove the enclosing double quotes
-                    String ingredients = data[1].replaceAll("^\"|\"$", ""); // Remove the enclosing double quotes
-                    String method = data[2].replaceAll("^\"|\"$", ""); // Remove the enclosing double quotes
-                    String recipe = name + ": \n\nIngredients - " + ingredients + ". \n\nDirections - " + method + ".";
+                String content="";
+                while(!line.equals("\""))
+                  {
+                      content+=line;
+                      content+="\n";
+                      line = reader.readLine();
+
+                  }
+
+                // Replace all the specified patterns with a unique delimiter
+                content = content.replace("\",\"", "|||||")
+                        .replace(",\"", "|||||")
+                        .replace("\"", "|||||");
+                // Now split the line using the unique delimiter
+                String[] data = content.split("\\|\\|\\|\\|\\|");
+                if (data.length >= 3) {
+                    String name = data[0].trim(); // Trim to remove any leading/trailing whitespace
+                    String ingredients = data[1].trim();
+                    String method = data[2].trim();
+                    String recipe = name + ": \n\nIngredients - " + ingredients + ". \n\nDirections - " + method ;
                     recipes.add(recipe);
                 }
             }
@@ -104,19 +123,28 @@ public class recipesearch extends AppCompatActivity {
     }
 
 
+
     private List<String> getRecipesWithIngredient(String ingredient) {
         List<String> filteredRecipes = new ArrayList<>();
-        String ingredientLowerCase = ingredient.toLowerCase();
+        String inputLowerCase = ingredient.toLowerCase().trim();
+
         for (String recipe : recipes) {
-            // Calculate the similarity between the recipe name and the target ingredient
-            double similarity = calculateSimilarity(recipe.toLowerCase(), ingredientLowerCase);
-            // If similarity reaches threshold, add recipe to results
-            if (similarity >= 0.6) { // can change
-                filteredRecipes.add(recipe);
+            int start = recipe.indexOf("Ingredients - ") + "Ingredients - ".length();
+            int end = recipe.indexOf(". ", start);
+            String ingredientsText = recipe.substring(start, end);
+            String[] ingredients = ingredientsText.split(", ");
+
+            for (String ingredientItem : ingredients) {
+                if (calculateSimilarity(ingredientItem.trim().toLowerCase(), inputLowerCase) >= 0.5) {  // Adjust similarity threshold as needed
+                    filteredRecipes.add(recipe);
+                    break;  // Stop checking further ingredients once a match is found
+                }
             }
         }
         return filteredRecipes;
     }
+
+
 
     private double calculateSimilarity(String s1, String s2) {
         int editDistance = editDistance(s1, s2);
