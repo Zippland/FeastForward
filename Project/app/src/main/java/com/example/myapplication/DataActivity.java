@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.myapplication.FileHelper;
 
@@ -16,17 +17,24 @@ import java.io.IOException;
 public class DataActivity extends AppCompatActivity {
 
     private static final String TAG = "DataActivity";
+    private EditText recipeInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data);
 
+        recipeInput = findViewById(R.id.recipe_input);
+
         Button addButton = findViewById(R.id.add_button);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addRecipe("Potato", "2024-04-30", 1); // example
+                String recipeName = recipeInput.getText().toString();
+                if (!recipeName.isEmpty()) {
+                    addRecipe(recipeName, "2024-04-30", 1); // example
+                    recipeInput.setText(""); // Clear the input field after adding
+                }
             }
         });
 
