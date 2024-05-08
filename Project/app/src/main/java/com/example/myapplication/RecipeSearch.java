@@ -26,67 +26,10 @@ public class RecipeSearch extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipesearch);
-        // Load the recipes data from the JSON file
-        // json url: https://github.com/sami9644/Food-recipes-json-file/blob/main/recipes.json
-
-        try {
-            String json = loadJSONFromAsset("recipe1.json");
-            JSONArray jsonArray = new JSONArray(json);
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String name = jsonObject.getString("Name");
-                JSONArray ingredientsArray = jsonObject.getJSONArray("Ingredients");
-                String ingredients = ingredientsArray.join("\n");
-                JSONArray methodArray = jsonObject.getJSONArray("Method");
-                String method = methodArray.join("\n");
-                String recipe = name + ": \n\nIngredients - " + ingredients + ". \n\nDirections - " + method + ".";
-                recipes.add(recipe);
-
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        loadFromJson();
+        loadFromCsv();
 
 
-
-        // Load the recipes data from the csv file
-        // csv url: https://www.kaggle.com/datasets/thedevastator/better-recipes-for-a-better-life
-        try {
-            InputStream is = getAssets().open("recipe2m.csv");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-            //BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-
-            reader.readLine(); // Skip the header line
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String content="";
-                while(!line.equals("\""))
-                  {
-                      content+=line;
-                      content+="\n";
-                      line = reader.readLine();
-
-                  }
-
-                // Replace all the specified patterns with a unique delimiter
-                content = content.replace("\",\"", "|||||")
-                        .replace(",\"", "|||||")
-                        .replace("\"", "|||||");
-                // Now split the line using the unique delimiter
-                String[] data = content.split("\\|\\|\\|\\|\\|");
-                if (data.length >= 3) {
-                    String name = data[0].trim(); // Trim to remove any leading/trailing whitespace
-                    String ingredients = data[1].trim();
-                    String method = data[2].trim();
-                    String recipe = name + ": \n\nIngredients - " + ingredients + ". \n\nDirections - " + method ;
-                    recipes.add(recipe);
-                }
-            }
-            is.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         EditText ingredientEditText = findViewById(R.id.ingredientEditText);
         Button button = findViewById(R.id.button);
         TextView recipeTextView = findViewById(R.id.recipeTextView);
@@ -137,7 +80,67 @@ public class RecipeSearch extends AppCompatActivity {
         }
         return filteredRecipes;
     }
+    private void loadFromJson(){
+        // Load the recipes data from the JSON file
+        // json url: https://github.com/sami9644/Food-recipes-json-file/blob/main/recipes.json
+        try {
+            String json = loadJSONFromAsset("recipe1.json");
+            JSONArray jsonArray = new JSONArray(json);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String name = jsonObject.getString("Name");
+                JSONArray ingredientsArray = jsonObject.getJSONArray("Ingredients");
+                String ingredients = ingredientsArray.join("\n");
+                JSONArray methodArray = jsonObject.getJSONArray("Method");
+                String method = methodArray.join("\n");
+                String recipe = name + ": \n\nIngredients - " + ingredients + ". \n\nDirections - " + method + ".";
+                recipes.add(recipe);
 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private void loadFromCsv(){
+        // Load the recipes data from the csv file
+        // csv url: https://www.kaggle.com/datasets/thedevastator/better-recipes-for-a-better-life
+        try {
+            InputStream is = getAssets().open("recipe2m.csv");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+            //BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+
+            reader.readLine(); // Skip the header line
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String content="";
+                while(!line.equals("\""))
+                {
+                    content+=line;
+                    content+="\n";
+                    line = reader.readLine();
+
+                }
+
+                // Replace all the specified patterns with a unique delimiter
+                content = content.replace("\",\"", "|||||")
+                        .replace(",\"", "|||||")
+                        .replace("\"", "|||||");
+                // Now split the line using the unique delimiter
+                String[] data = content.split("\\|\\|\\|\\|\\|");
+                if (data.length >= 3) {
+                    String name = data[0].trim(); // Trim to remove any leading/trailing whitespace
+                    String ingredients = data[1].trim();
+                    String method = data[2].trim();
+                    String recipe = name + ": \n\nIngredients - " + ingredients + ". \n\nDirections - " + method ;
+                    recipes.add(recipe);
+                }
+            }
+            is.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     private double calculateSimilarity(String s1, String s2) {
