@@ -35,16 +35,16 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         String[] result = recipeData.get(position);
         holder.itemName.setText(result[0]);
         holder.expiredTime.setText(result[1]);
-        //计算相差值提醒
+        //Calculate Difference Reminder
         LocalDate now = LocalDate.now();
         LocalDate expired = LocalDate.parse(result[1]);
         long between = ChronoUnit.DAYS.between(now, expired);
         if (between > 0) {
             if (between <= 3) {
-                holder.expiredStatus.setText("（还剩 " + between + " 天过期）");
+                holder.expiredStatus.setText("（" + between + " days left to expire）");
             }
         }  else {
-            holder.expiredStatus.setText("（已过期）");
+            holder.expiredStatus.setText("（expired）");
         }
     }
 

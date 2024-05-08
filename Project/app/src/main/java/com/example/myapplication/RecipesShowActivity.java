@@ -65,7 +65,7 @@ public class RecipesShowActivity extends AppCompatActivity {
                     View child = recipesList.findChildViewUnder(e.getX(), e.getY());
                     if (child != null) {
                         int position = recipesList.getChildAdapterPosition(child);
-                        // 弹出上下文菜单或执行删除操作
+                        // Bring up a context menu or perform a delete operation
                         showContextMenu(position);
                     }
                 }
@@ -86,17 +86,17 @@ public class RecipesShowActivity extends AppCompatActivity {
         });
     }
 
-    //解析数据
+
     public List<String[]> parseCsv() {
         List<String[]> result = new ArrayList<>();
         if (!file.exists()) {
-            result.add(new String[]{"文件不存在", "2099-12-31", "1"});
+            result.add(new String[]{"File does not exist", "2099-12-31", "1"});
             return result;
         }
         try {
             String[] lines = FileHelper.readFileLines(file);
             if (lines.length < 1) {
-                result.add(new String[]{"您没有添加任何数据", "2099-12-31", "1"});
+                result.add(new String[]{"You have not added any data", "2099-12-31", "1"});
                 return result;
             }
             for (String line : lines) {
@@ -111,9 +111,9 @@ public class RecipesShowActivity extends AppCompatActivity {
         return result;
     }
 
-    //删除数据
+    //delete data from dataset
     public void deleteRecipe(int lineNumber) {
-        Path path = Paths.get(file.toURI()); // 替换为你的CSV文件路径
+        Path path = Paths.get(file.toURI()); // dataset
         try {
             List<String> lines = Files.readAllLines(path);
             if (lines.size() > lineNumber) {
@@ -125,20 +125,20 @@ public class RecipesShowActivity extends AppCompatActivity {
         }
     }
 
-    //显示删除弹窗
+    //Show Delete Popup
     private void showContextMenu(int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("您确定要删除这个数据吗？")
-                .setPositiveButton("删除", (dialog, id) -> {
-                    // 从数据集中移除数据
+        builder.setMessage("Are you sure you want to delete this data?？")
+                .setPositiveButton("Delete", (dialog, id) -> {
+                    // Removing data from a dataset
                     recipeData.remove(position);
                     deleteRecipe(position);
-                    // 通知适配器数据已经改变
+
                     recipeAdapter.notifyItemRemoved(position);
                     View rootView = getWindow().getDecorView().getRootView();
-                    Snackbar.make(rootView, "移除数据成功！", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(rootView, "Remove data successfully！", Toast.LENGTH_SHORT).show();
                 })
-                .setNegativeButton("取消", (dialog, id) -> {});
+                .setNegativeButton("Cancel", (dialog, id) -> {});
         AlertDialog dialog = builder.create();
         dialog.show();
     }

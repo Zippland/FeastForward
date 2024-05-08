@@ -50,16 +50,16 @@ public class DataActivity extends AppCompatActivity {
             String expiredTime = expiredInput.getText().toString();
             if (!recipeName.isEmpty() && !expiredTime.isEmpty()) {
                 addRecipe(recipeName, expiredTime, 1);
-                //清空输入
+                //clear input
                 recipeInput.setText("");
                 expiredInput.setText("");
-                showContextMenu("数据添加成功！");
+                showContextMenu("Data added successfully！");
             } else {
-                showContextMenu("必填项不能为空");
+                showContextMenu("Mandatory fields cannot be blank");
             }
         });
 
-        //读取所有数据并显示
+        //Read all data and display
         Button displayButton = findViewById(R.id.display_button);
         displayButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, RecipesShowActivity.class);
@@ -67,19 +67,19 @@ public class DataActivity extends AppCompatActivity {
         });
 
         Button searchButton = findViewById(R.id.button);
-        //搜索按钮
+        //search
         searchButton.setOnClickListener(v -> {
 
         });
     }
 
-    //添加数据
+    //add data
     private void addRecipe(String recipeName, String expireDate, int userId) {
         String entry = recipeName + "," + expireDate + "," + userId;
         writeEntryToDataset(entry);
     }
 
-    //写入数据
+    //write data to dataset
     private void writeEntryToDataset(String entry) {
         File file = new File(getFilesDir(), "dataset.csv");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
@@ -91,12 +91,12 @@ public class DataActivity extends AppCompatActivity {
         }
     }
 
-    //显示成功弹窗
+    //Show success popup
     private void showContextMenu(String msg) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(msg)
-                .setTitle("状态面板")
-                .setNegativeButton("确定", (dialog, id) -> {});
+                .setTitle("status panel")
+                .setNegativeButton("OK", (dialog, id) -> {});
         AlertDialog dialog = builder.create();
         dialog.show();
     }
