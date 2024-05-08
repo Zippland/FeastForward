@@ -23,7 +23,7 @@
             android:exported="true" />
         <activity
             android:name=".ExpiredFoodAlert"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
