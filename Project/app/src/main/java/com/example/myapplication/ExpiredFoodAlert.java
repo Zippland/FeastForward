@@ -22,8 +22,17 @@ public class ExpiredFoodAlert extends AppCompatActivity {
         System.out.println("success");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-
         TextView foodName = findViewById(R.id.foodName);
+        int userId = getIntent().getIntExtra("USER_ID", -1);
+        String username = getIntent().getStringExtra("USER_NAME");
+        if (userId != -1) {
+            foodName.setText("Hello User " + userId +":" + username);
+            Toast.makeText(this, "User ID: " + userId, Toast.LENGTH_LONG).show();//can be removed
+        } else {
+            foodName.setText("Hello No User ");
+            Toast.makeText(this, "No valid user ID passed.", Toast.LENGTH_LONG).show();
+        }
+
 
 
         try {

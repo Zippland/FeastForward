@@ -31,10 +31,15 @@ public class MainActivity extends AppCompatActivity {
         loginButton.setOnClickListener(v -> {
             String username = usernameEditText.getText().toString();
             String password = passwordEditText.getText().toString();
-
+            int userId = getUserId(username);
             if (checkCredentials(username, password)) {
                 Toast.makeText(MainActivity.this, "Log in successfully!", Toast.LENGTH_SHORT).show();
+
+                //Intent intent2 = new Intent(MainActivity.this, ExpiredFoodAlert.class);  // Intent to the correct activity
+
                 Intent intent = new Intent(MainActivity.this, AfterLogin.class);
+                intent.putExtra("USER_ID", userId);
+                intent.putExtra("USER_NAME", username);
                 startActivity(intent);
             } else {
                 Toast.makeText(MainActivity.this, "The username or password is incorrect!", Toast.LENGTH_SHORT).show();
@@ -62,6 +67,18 @@ public class MainActivity extends AppCompatActivity {
         facebookLoginButton.setOnClickListener(listener);
         googleLoginButton.setOnClickListener(listener);
         twitterLoginButton.setOnClickListener(listener);
+    }
+    private int getUserId(String username) {
+        switch (username) {
+            case "comp2100@anu.edu.au":
+                return 1;
+            case "comp6442@anu.edu.au":
+                return 2;
+            case "a":
+                return 3;
+            default:
+                return -1; // Invalid user
+        }
     }
 
     private boolean checkCredentials(String username, String password) {
