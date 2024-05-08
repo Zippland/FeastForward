@@ -34,12 +34,14 @@ public class MainActivity extends AppCompatActivity {
                 String username = usernameEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
                 int userId = getUserId(username);
+                String usernickname = getUserNickName(username);
                 if (checkCredentials(username, password)) {
                     Toast.makeText(MainActivity.this, "Log in successfully!", Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(MainActivity.this, AfterLogin.class);
                     intent.putExtra("USER_ID", userId);
                     intent.putExtra("USER_NAME", username);
+                    intent.putExtra("USER_NICKNAME", usernickname);
                     startActivity(intent);
                 } else {
                     Toast.makeText(MainActivity.this, "The username or password is incorrect!", Toast.LENGTH_SHORT).show();
@@ -86,6 +88,19 @@ public class MainActivity extends AppCompatActivity {
                 return 3;
             default:
                 return -1; // Invalid user
+        }
+    }
+
+    private String getUserNickName(String username) {
+        switch (username) {
+            case "comp2100@anu.edu.au":
+                return "comp2100";
+            case "comp6442@anu.edu.au":
+                return "comp6442";
+            case "a":
+                return "user Aa";
+            default:
+                return ""; // Invalid user
         }
     }
 

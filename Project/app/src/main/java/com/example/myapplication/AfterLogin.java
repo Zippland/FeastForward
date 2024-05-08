@@ -17,11 +17,12 @@ public class AfterLogin extends AppCompatActivity {
         // Retrieve the user ID and username passed from MainActivity
         int userId = getIntent().getIntExtra("USER_ID", -1);
         String username = getIntent().getStringExtra("USER_NAME");
+        String usernickname = getIntent().getStringExtra("USER_NICKNAME");
 
         // Setup the welcome message with the user's name
         TextView welcomeTextView = findViewById(R.id.welcomeTextView);
-        if (username != null && !username.isEmpty()) {
-            welcomeTextView.setText("Welcome, " + username + "!");
+        if (usernickname != null && !usernickname.isEmpty()) {
+            welcomeTextView.setText("Welcome, " + usernickname + "!");
         } else {
             welcomeTextView.setText("Welcome, Guest!"); // Fallback if no username is provided
         }
