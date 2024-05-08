@@ -10,8 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.File;
-
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -28,9 +26,6 @@ public class MainActivity extends AppCompatActivity {
         ImageButton facebookLoginButton = findViewById(R.id.facebookLoginButton);
         ImageButton googleLoginButton = findViewById(R.id.googleLoginButton);
         ImageButton twitterLoginButton = findViewById(R.id.twitterLoginButton);
-
-        // Clear internal storage files
-        cleanInternalStorage();
 
         // Set up listeners
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -114,17 +109,5 @@ public class MainActivity extends AppCompatActivity {
         return (username.equals("comp2100@anu.edu.au") && password.equals("comp2100")) ||
                 (username.equals("comp6442@anu.edu.au") && password.equals("comp6442")) ||
                 (username.equals("a") && password.equals("1"));
-    }
-
-    private void cleanInternalStorage() {
-        File directory = getFilesDir(); // Or getCacheDir() if you want to clear cache
-        if (directory != null && directory.isDirectory()) {
-            String[] children = directory.list();
-            if (children != null) {
-                for (String child : children) {
-                    new File(directory, child).delete();
-                }
-            }
-        }
     }
 }
