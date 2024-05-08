@@ -4,7 +4,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Button;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,34 +16,48 @@ import java.util.Date;
 import java.util.Locale;
 
 public class ExpiredFoodAlert extends AppCompatActivity {
-
-    int userId;
+    private int userId;
+    private TableLayout tableLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
+        // Ensure food_data.csv is always available
+        if (!doesFoodDataFileExist()) {
+            try {
+                copyRawResourceToFileIfNotExists(R.raw.food_data, "food_data.csv");
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(this, "Error copying food data.", Toast.LENGTH_LONG).show();
+            }
+        }
+
         // Enable the Up button
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        TextView foodName = findViewById(R.id.foodName);
+        tableLayout = findViewById(R.id.tblFoodExpiry);
+        TextView tvHelloUser = findViewById(R.id.tvHelloUser);
+
+        // Get user details from Intent
         userId = getIntent().getIntExtra("USER_ID", -1);
         String username = getIntent().getStringExtra("USER_NAME");
 
-
+        // Display user greeting
         if (userId != -1) {
-            foodName.setText("Hello User " + userId + ": " + username);
+            tvHelloUser.setText("Hello User " + userId + ": " + username);
             Toast.makeText(this, "User ID: " + userId, Toast.LENGTH_LONG).show();
         } else {
-            foodName.setText("Hello No User");
+            tvHelloUser.setText("Hello No User");
             Toast.makeText(this, "No valid user ID passed.", Toast.LENGTH_LONG).show();
         }
 
-
+        // Populate table and check for near-expiry items
         try {
+            populateTableWithUserData();
             checkNearExpiryItems();
         } catch (IOException e) {
             e.printStackTrace();
@@ -67,24 +82,56 @@ public class ExpiredFoodAlert extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void checkNearExpiryItems() throws IOException {
-        File foodDataFile;
-        BufferedReader reader;
-        if(doesFoodDataFileExist()) {
+    private void populateTableWithUserData() throws IOException {
+        File foodDataFile = new File(getFilesDir(), "food_data.csv");
+        BufferedReader reader = new BufferedReader(new FileReader(foodDataFile));
+        String line;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        while ((line = reader.readLine()) != null) {
+            String[] tokens = line.split(",");
+            if (tokens.length >= 3) {
+                String foodName = tokens[0];
+                String expiryDate = tokens[1];
+                String readUserId = tokens[2];
+                try {
+                    if (userId == Integer.parseInt(readUserId)) {
+                        addRowToTable(foodName, expiryDate);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
 
-            System.out.println("exist");
-        }else{
-            // Ensure food_data.csv is always available
-            try {
-                copyRawResourceToFileIfNotExists(R.raw.food_data, "food_data.csv");
-            } catch (IOException e) {
-                e.printStackTrace();
-                Toast.makeText(this, "Error copying food data.", Toast.LENGTH_LONG).show();
             }
         }
-        foodDataFile = new File(getFilesDir(), "food_data.csv");
-        reader = new BufferedReader(new FileReader(foodDataFile));
+        reader.close();
+    }
 
+    private void addRowToTable(String foodName, String expiryDate) {
+        TableRow row = new TableRow(this);
+        row.setGravity(android.view.Gravity.CENTER);
+
+        TextView foodTextView = new TextView(this);
+        foodTextView.setText(foodName);
+        foodTextView.setGravity(android.view.Gravity.CENTER);
+        foodTextView.setPadding(8, 8, 8, 8);
+        foodTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1));
+
+        TextView expiryTextView = new TextView(this);
+        expiryTextView.setText(expiryDate);
+        expiryTextView.setGravity(android.view.Gravity.CENTER);
+        expiryTextView.setPadding(8, 8, 8, 8);
+        expiryTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1));
+
+        row.addView(foodTextView);
+        row.addView(expiryTextView);
+
+        tableLayout.addView(row);
+    }
+
+
+    private void checkNearExpiryItems() throws IOException {
+        File foodDataFile = new File(getFilesDir(), "food_data.csv");
+        BufferedReader reader = new BufferedReader(new FileReader(foodDataFile));
         String line;
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
@@ -96,9 +143,6 @@ public class ExpiredFoodAlert extends AppCompatActivity {
             if (tokens.length >= 3) {
                 String foodName = tokens[0];
                 String readUserId = tokens[2];
-//                System.out.println(tokens[0]);
-//                System.out.println(tokens[1]);
-//                System.out.println(tokens[2]);
 
                 try {
                     if (userId == Integer.parseInt(readUserId)) {
@@ -139,9 +183,7 @@ public class ExpiredFoodAlert extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try {
-                    System.out.println("tried");
                     deleteFoodItem(foodName);
-
                     Toast.makeText(ExpiredFoodAlert.this, "Food item deleted successfully.", Toast.LENGTH_LONG).show();
                 } catch (IOException e) {
                     Toast.makeText(ExpiredFoodAlert.this, "Error deleting food item.", Toast.LENGTH_LONG).show();
@@ -172,7 +214,6 @@ public class ExpiredFoodAlert extends AppCompatActivity {
         for (String remainingLine : lines) {
             writer.write(remainingLine);
             writer.newLine();
-            System.out.println(remainingLine);
         }
         writer.close();
     }
@@ -185,7 +226,7 @@ public class ExpiredFoodAlert extends AppCompatActivity {
     private void copyRawResourceToFileIfNotExists(int resourceId, String outputFileName) throws IOException {
         InputStream inputStream = getResources().openRawResource(resourceId);
         File outputFile = new File(getFilesDir(), outputFileName);
-        if (!outputFile.exists()) {  // Add a check to prevent overwriting existing files
+        if (!outputFile.exists()) {
             FileOutputStream outputStream = new FileOutputStream(outputFile);
             byte[] buffer = new byte[1024];
             int length;
