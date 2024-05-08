@@ -28,39 +28,46 @@ public class MainActivity extends AppCompatActivity {
         ImageButton twitterLoginButton = findViewById(R.id.twitterLoginButton);
 
         // Set up listeners
-        loginButton.setOnClickListener(v -> {
-            String username = usernameEditText.getText().toString();
-            String password = passwordEditText.getText().toString();
-            int userId = getUserId(username);
-            if (checkCredentials(username, password)) {
-                Toast.makeText(MainActivity.this, "Log in successfully!", Toast.LENGTH_SHORT).show();
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String username = usernameEditText.getText().toString();
+                String password = passwordEditText.getText().toString();
+                int userId = getUserId(username);
+                if (checkCredentials(username, password)) {
+                    Toast.makeText(MainActivity.this, "Log in successfully!", Toast.LENGTH_SHORT).show();
 
-                //Intent intent2 = new Intent(MainActivity.this, ExpiredFoodAlert.class);  // Intent to the correct activity
-
-                Intent intent = new Intent(MainActivity.this, AfterLogin.class);
-                intent.putExtra("USER_ID", userId);
-                intent.putExtra("USER_NAME", username);
-                startActivity(intent);
-            } else {
-                Toast.makeText(MainActivity.this, "The username or password is incorrect!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(MainActivity.this, AfterLogin.class);
+                    intent.putExtra("USER_ID", userId);
+                    intent.putExtra("USER_NAME", username);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(MainActivity.this, "The username or password is incorrect!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
-        forgotPassword.setOnClickListener(v -> {
-            // Handle forgot password click
-            Toast.makeText(MainActivity.this, "Reset password feature not implemented yet.", Toast.LENGTH_SHORT).show();
+        forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle forgot password click
+                Toast.makeText(MainActivity.this, "Reset password feature not implemented yet.", Toast.LENGTH_SHORT).show();
+            }
         });
 
-        signUpButton.setOnClickListener(v -> {
-            // Handle sign up click
-            Toast.makeText(MainActivity.this, "Sign up feature not implemented yet.", Toast.LENGTH_SHORT).show();
+        signUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Handle sign up click
+                Toast.makeText(MainActivity.this, "Sign up feature not implemented yet.", Toast.LENGTH_SHORT).show();
+            }
         });
 
         // Handle third-party sign up click
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle sign up click
+                // Placeholder for third-party login functionality
                 Toast.makeText(MainActivity.this, "Third-party sign up feature not implemented yet.", Toast.LENGTH_SHORT).show();
             }
         };
@@ -68,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         googleLoginButton.setOnClickListener(listener);
         twitterLoginButton.setOnClickListener(listener);
     }
+
     private int getUserId(String username) {
         switch (username) {
             case "comp2100@anu.edu.au":
@@ -84,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean checkCredentials(String username, String password) {
         // Hardcoded credentials for demonstration
         return (username.equals("comp2100@anu.edu.au") && password.equals("comp2100")) ||
-                (username.equals("comp6442@anu.edu.au") && password.equals("comp6442"))||
+                (username.equals("comp6442@anu.edu.au") && password.equals("comp6442")) ||
                 (username.equals("a") && password.equals("1"));
     }
 }
