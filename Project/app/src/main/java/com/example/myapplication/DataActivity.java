@@ -20,15 +20,7 @@ public class DataActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        Button searchButton = findViewById(R.id.button);
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Perform search action
-            }
-        });
+        setContentView(R.layout.activity_data);
 
         Button addButton = findViewById(R.id.add_button);
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -43,6 +35,14 @@ public class DataActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 displayRecipesForUser(1); // user number
+            }
+        });
+
+        Button searchButton = findViewById(R.id.button);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Perform search action
             }
         });
     }
