@@ -1,5 +1,7 @@
-Food Name,Expiry Date
-Milk,2024-05-03
-Eggs,2024-05-05
-Butter,2024-04-30
-Cheese,2024-05-01
+Food Name,Expiry Date,UserId
+Milk,2024-05-12,1
+Eggs,2024-05-10,3
+Butter,2024-05-09,3
+Fish,2024-05-30,3
+Cheese,2024-05-09,4
+Bread,2024-05-09,1
