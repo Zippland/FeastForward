@@ -44,7 +44,7 @@ public class DataActivity extends AppCompatActivity {
         recipeInput = findViewById(R.id.recipe_input);
         expiredInput = findViewById(R.id.expired_input);
 
-        //添加数据
+        //add data
         Button addButton = findViewById(R.id.add_button);
         addButton.setOnClickListener(v -> {
             View rootView = getWindow().getDecorView().getRootView();

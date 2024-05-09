@@ -90,11 +90,10 @@ public class RecipeSearchActivity extends AppCompatActivity {
                 sortData.clear();
                 if (!TextUtils.isEmpty(newText)) {
                     for (Recipe recipeDatum : recipeData) {
-                        Log.d("Test", recipeDatum.getTitle());
                         int containNumber = 0;
-                        char[] charArray = newText.toCharArray();
+                        char[] charArray = newText.toLowerCase().toCharArray();
                         for (char c : charArray) {
-                            if (recipeDatum.getTitle().contains(String.valueOf(c))) {
+                            if (recipeDatum.getTitle().toLowerCase().contains(String.valueOf(c))) {
                                 containNumber++;
                             }
                         }

@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -89,10 +90,11 @@ public class RecipesShowActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Are you sure you want to delete this data?？")
                 .setPositiveButton("Delete", (dialog, id) -> {
+                    Log.d("Test", "showContextMenu: "+"执行成功");
                     // Removing data from a dataset
+                    Recipe recipe = recipeData.get(position);
+                    DataUtil.deleteRecipe(recipe.getTitle());
                     recipeData.remove(position);
-                    DataUtil.deleteRecipe(position);
-
                     recipeAdapter.notifyItemRemoved(position);
                     View rootView = getWindow().getDecorView().getRootView();
                     Snackbar.make(rootView, "Remove data successfully！", Toast.LENGTH_SHORT).show();
