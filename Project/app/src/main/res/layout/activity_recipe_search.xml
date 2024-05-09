@@ -16,7 +16,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:iconifiedByDefault="false"
-        android:queryHint="Please enter a name for the Recipe."
+        android:queryHint="Please enter a name for the Food."
         app:layout_constraintEnd_toStartOf="@+id/button_sort"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
