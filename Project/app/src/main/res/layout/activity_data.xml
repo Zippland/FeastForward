@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
+    android:background="#FAFAFA"
     tools:context=".DataActivity">
 
     <EditText
@@ -12,13 +13,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter Recipe Name"
+        android:background="@drawable/edit_text_style"
+        android:padding="10dp"
         android:layout_marginBottom="16dp"/>
 
     <EditText
         android:id="@+id/expired_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Expired Time(Example:2024-04-30)"
+        android:hint="Select Expiry Date"
+        android:focusable="false"
+        android:background="@drawable/edit_text_style"
+        android:padding="10dp"
+        android:drawableEnd="@drawable/ic_calendar"
         android:layout_marginBottom="16dp"/>
 
     <Button
@@ -26,6 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add Recipe"
+        android:background="@drawable/button_style"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="20dp"/>
 
@@ -34,6 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Display Recipes"
+        android:background="@drawable/button_style"
         android:layout_gravity="center_horizontal"/>
 
     <Button
@@ -41,6 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Search"
+        android:background="@drawable/button_style"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"/>
 

@@ -27,12 +27,15 @@ import java.lang.ref.Cleaner;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import android.app.DatePickerDialog;
+import android.widget.DatePicker;
+import android.os.Bundle;
+import android.widget.EditText;
+import java.util.Calendar;
 
 public class DataActivity extends AppCompatActivity {
 
-    private static final String TAG = "DataActivity";
-    private EditText recipeInput;
-    private EditText expiredInput;
+    private EditText recipeInput, expiredInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,7 @@ public class DataActivity extends AppCompatActivity {
 
         recipeInput = findViewById(R.id.recipe_input);
         expiredInput = findViewById(R.id.expired_input);
+        expiredInput.setOnClickListener(v -> showDatePickerDialog());
 
         //添加数据
         Button addButton = findViewById(R.id.add_button);
@@ -99,6 +103,18 @@ public class DataActivity extends AppCompatActivity {
                 .setNegativeButton("OK", (dialog, id) -> {});
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    private void showDatePickerDialog() {
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                (view, year1, monthOfYear, dayOfMonth) -> expiredInput.setText(String.format("%d-%02d-%02d", year1, monthOfYear + 1, dayOfMonth)),
+                year, month, day);
+        datePickerDialog.show();
     }
 
 }
