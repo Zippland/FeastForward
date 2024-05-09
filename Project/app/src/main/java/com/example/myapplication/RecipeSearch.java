@@ -42,7 +42,9 @@ public class RecipeSearch extends AppCompatActivity {
 
         // Initially disable the search button until recipes are loaded
         searchButton.setEnabled(false);
-
+        mainThreadHandler.post(() -> {
+            Toast.makeText(getApplicationContext(), "Recipes are loading, please wait...", Toast.LENGTH_LONG).show();
+        });
         executor.execute(() -> {
             loadFromJson();
             loadFromCsv();
