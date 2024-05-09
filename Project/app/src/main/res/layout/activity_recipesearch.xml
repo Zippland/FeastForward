@@ -5,35 +5,42 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     tools:context=".RecipeSearch">
+
     <EditText
-        android:id="@+id/ingredientEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="50dp"
-        android:hint="Enter ingredient"
-        app:layout_constraintEnd_toStartOf="@+id/button"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:id="@+id/ingredientEditText"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="20dp"
+    android:layout_marginEnd="16dp"
+    android:hint="Enter ingredient"
+    android:padding="12dp"
+    android:background="@drawable/edit_text_background"
+    app:layout_constraintEnd_toStartOf="@+id/button"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="60dp"
-        android:text="search"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:id="@+id/button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="20dp"
+    android:text="Search"
+    android:background="@drawable/button_background"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/recipeTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="5dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+    android:id="@+id/recipeTextView"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="24dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+    app:layout_constraintTop_toBottomOf="@+id/button"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
