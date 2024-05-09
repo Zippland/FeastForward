@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Adapter.RecipeAdapter;
+import com.example.myapplication.Utils.DataUtil;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
@@ -33,9 +34,7 @@ public class RecipesShowActivity extends AppCompatActivity {
 
     RecipeAdapter recipeAdapter;
 
-    List<String[]> recipeData;
-
-    File file;
+    List<Recipe> recipeData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +50,8 @@ public class RecipesShowActivity extends AppCompatActivity {
     }
 
     public void init() {
-        file = new File(getFilesDir(), "dataset.csv");
         recipesList = findViewById(R.id.recipe_list);
-        recipeData = parseCsv();
+        recipeData = DataUtil.parseCsv();
         recipeAdapter = new RecipeAdapter(recipeData);
         recipesList.setAdapter(recipeAdapter);
         recipesList.setLayoutManager(new LinearLayoutManager(this));
@@ -86,45 +84,6 @@ public class RecipesShowActivity extends AppCompatActivity {
         });
     }
 
-
-    public List<String[]> parseCsv() {
-        List<String[]> result = new ArrayList<>();
-        if (!file.exists()) {
-            result.add(new String[]{"File does not exist", "2099-12-31", "1"});
-            return result;
-        }
-        try {
-            String[] lines = FileHelper.readFileLines(file);
-            if (lines.length < 1) {
-                result.add(new String[]{"You have not added any data", "2099-12-31", "1"});
-                return result;
-            }
-            for (String line : lines) {
-                String[] parts = line.split(",");
-                if (parts.length >= 3) {
-                    result.add(parts);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    //delete data from dataset
-    public void deleteRecipe(int lineNumber) {
-        Path path = Paths.get(file.toURI()); // dataset
-        try {
-            List<String> lines = Files.readAllLines(path);
-            if (lines.size() > lineNumber) {
-                lines.remove(lineNumber);
-            }
-            Files.write(path, lines, StandardOpenOption.TRUNCATE_EXISTING);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     //Show Delete Popup
     private void showContextMenu(int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -132,7 +91,7 @@ public class RecipesShowActivity extends AppCompatActivity {
                 .setPositiveButton("Delete", (dialog, id) -> {
                     // Removing data from a dataset
                     recipeData.remove(position);
-                    deleteRecipe(position);
+                    DataUtil.deleteRecipe(position);
 
                     recipeAdapter.notifyItemRemoved(position);
                     View rootView = getWindow().getDecorView().getRootView();

@@ -17,6 +17,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.myapplication.FileHelper;
+import com.example.myapplication.Utils.DataUtil;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.BufferedWriter;
@@ -27,24 +28,21 @@ import java.lang.ref.Cleaner;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
-import android.app.DatePickerDialog;
-import android.widget.DatePicker;
-import android.os.Bundle;
-import android.widget.EditText;
-import java.util.Calendar;
 
 public class DataActivity extends AppCompatActivity {
 
-    private EditText recipeInput, expiredInput;
+    private static final String TAG = "DataActivity";
+    private EditText recipeInput;
+    private EditText expiredInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data);
 
+        DataUtil.init(this);
         recipeInput = findViewById(R.id.recipe_input);
         expiredInput = findViewById(R.id.expired_input);
-        expiredInput.setOnClickListener(v -> showDatePickerDialog());
 
         //添加数据
         Button addButton = findViewById(R.id.add_button);
@@ -73,26 +71,15 @@ public class DataActivity extends AppCompatActivity {
         Button searchButton = findViewById(R.id.button);
         //search
         searchButton.setOnClickListener(v -> {
-
+            Intent intent = new Intent(this, RecipeSearchActivity.class);
+            startActivity(intent);
         });
     }
 
     //add data
     private void addRecipe(String recipeName, String expireDate, int userId) {
         String entry = recipeName + "," + expireDate + "," + userId;
-        writeEntryToDataset(entry);
-    }
-
-    //write data to dataset
-    private void writeEntryToDataset(String entry) {
-        File file = new File(getFilesDir(), "dataset.csv");
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
-            writer.write(entry);
-            writer.newLine();
-            writer.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        DataUtil.writeEntryToDataset(entry);
     }
 
     //Show success popup
@@ -103,18 +90,6 @@ public class DataActivity extends AppCompatActivity {
                 .setNegativeButton("OK", (dialog, id) -> {});
         AlertDialog dialog = builder.create();
         dialog.show();
-    }
-
-    private void showDatePickerDialog() {
-        final Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                (view, year1, monthOfYear, dayOfMonth) -> expiredInput.setText(String.format("%d-%02d-%02d", year1, monthOfYear + 1, dayOfMonth)),
-                year, month, day);
-        datePickerDialog.show();
     }
 
 }

@@ -10,15 +10,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.Recipe;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
-    List<String[]> recipeData;
+    List<Recipe> recipeData;
 
-    public RecipeAdapter(List<String[]> recipeData) {
+    public RecipeAdapter(List<Recipe> recipeData) {
         this.recipeData = recipeData;
 
     }
@@ -32,12 +33,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
-        String[] result = recipeData.get(position);
-        holder.itemName.setText(result[0]);
-        holder.expiredTime.setText(result[1]);
+        Recipe result = recipeData.get(position);
+        holder.itemName.setText(result.getTitle());
+        holder.expiredTime.setText(result.getExpireDate());
         //Calculate Difference Reminder
         LocalDate now = LocalDate.now();
-        LocalDate expired = LocalDate.parse(result[1]);
+        LocalDate expired = LocalDate.parse(result.getExpireDate());
         long between = ChronoUnit.DAYS.between(now, expired);
         if (between > 0) {
             if (between <= 3) {
