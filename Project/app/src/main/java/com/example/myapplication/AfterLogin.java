@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -26,12 +27,36 @@ public class AfterLogin extends AppCompatActivity {
         } else {
             welcomeTextView.setText("Welcome, Guest!"); // Fallback if no username is provided
         }
+        // Setup the ImageView and DescriptionView for user profile
+        TextView userDescription = findViewById(R.id.userDescription);
+        ImageView logoImageView = findViewById(R.id.logoImageView);
 
         Button btnRecipeSearch = findViewById(R.id.btnRecipeSearch);
         Button btnDataActivity = findViewById(R.id.btnDataActivity);
         Button btnExpireFoodAlert = findViewById(R.id.btnExpireFoodAlert);
 
+
+        switch (userId) {
+            case 1:
+                logoImageView.setImageResource(R.drawable.user1);
+                userDescription.setText("You like Asian food and your favourite fruit is Apple.");
+                break;
+            case 2:
+                logoImageView.setImageResource(R.drawable.user2);
+                userDescription.setText("You like Italian food and your favourite fruit is Banana.");
+                break;
+            case 3:
+                logoImageView.setImageResource(R.drawable.user3);
+                userDescription.setText("You like Mexican food and your favourite fruit is Orange.");
+                break;
+            default:
+                logoImageView.setImageResource(R.drawable.logo); // Default or generic logo
+                userDescription.setText("User preferences not set.");
+                break;
+        }
+
         // Set onClickListeners for each button to start different activities
+
         btnRecipeSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
