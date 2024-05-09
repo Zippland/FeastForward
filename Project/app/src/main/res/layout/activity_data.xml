@@ -12,7 +12,7 @@
         android:id="@+id/recipe_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Recipe Name"
+        android:hint="Enter Food Name"
         android:background="@drawable/edit_text_style"
         android:padding="10dp"
         android:layout_marginBottom="16dp"/>
