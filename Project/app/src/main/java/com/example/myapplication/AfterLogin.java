@@ -39,15 +39,15 @@ public class AfterLogin extends AppCompatActivity {
         switch (userId) {
             case 1:
                 logoImageView.setImageResource(R.drawable.user1);
-                userDescription.setText("You like Asian food and your favourite fruit is Apple.");
+                userDescription.setText("You like Asian food and your favourite fruit is Strawberry.");
                 break;
             case 2:
                 logoImageView.setImageResource(R.drawable.user2);
-                userDescription.setText("You like Italian food and your favourite fruit is Banana.");
+                userDescription.setText("You like Italian food and your favourite fruit is Orange.");
                 break;
             case 3:
                 logoImageView.setImageResource(R.drawable.user3);
-                userDescription.setText("You like Mexican food and your favourite fruit is Orange.");
+                userDescription.setText("You like Mexican food and your favourite fruit is Grape.");
                 break;
             default:
                 logoImageView.setImageResource(R.drawable.logo); // Default or generic logo
