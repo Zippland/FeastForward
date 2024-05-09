@@ -4,10 +4,13 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -17,6 +20,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -26,38 +32,43 @@ public class RecipeSearch extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipesearch);
-        loadFromJson();
-        loadFromCsv();
 
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler mainThreadHandler = new Handler(Looper.getMainLooper());
 
         EditText ingredientEditText = findViewById(R.id.ingredientEditText);
-        Button button = findViewById(R.id.button);
+        Button searchButton = findViewById(R.id.button);
         TextView recipeTextView = findViewById(R.id.recipeTextView);
 
-        // Set a click listener for the Button
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Get the entered ingredient
-                String ingredient = ingredientEditText.getText().toString();
+        // Initially disable the search button until recipes are loaded
+        searchButton.setEnabled(false);
 
-                // Get the recipes with the entered ingredient
-                List<String> filteredRecipes = getRecipesWithIngredient(ingredient);
+        executor.execute(() -> {
+            loadFromJson();
+            loadFromCsv();
 
-                // Display the recipes in the TextView
-                if (!filteredRecipes.isEmpty()) {
-                    //recipeTextView.setText(filteredRecipes.get(0)); // can get random recipe below
-                    Random random = new Random();
-                    int randomIndex = random.nextInt(filteredRecipes.size());
-                    recipeTextView.setText(filteredRecipes.get(randomIndex));
-
-                } else {
-                    recipeTextView.setText("No recipes found with the entered ingredient.");
-                }
-            }
+            mainThreadHandler.post(() -> {
+                // Enable the button now that the data is loaded
+                searchButton.setEnabled(true);
+                Toast.makeText(getApplicationContext(), "Recipes Loaded", Toast.LENGTH_SHORT).show();
+            });
         });
 
+        searchButton.setOnClickListener(v -> {
+            String ingredient = ingredientEditText.getText().toString();
+            List<String> filteredRecipes = getRecipesWithIngredient(ingredient);
+            if (!filteredRecipes.isEmpty()) {
+                Random random = new Random();
+                int randomIndex = random.nextInt(filteredRecipes.size());
+                recipeTextView.setText(filteredRecipes.get(randomIndex));
+            } else {
+                recipeTextView.setText("No recipes found with the entered ingredient.");
+            }
+        });
     }
+
+
+
 
 
 
