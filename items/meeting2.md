@@ -3,7 +3,7 @@
 ## Team Meeting 2 - Week 8 - 26/04/2024 (1:30pm - 4:30pm)
 **Absent: 0**
 <br>
-**Lead/scribe: Yue Yu**
+**Lead/scribe: Zhongyi Ding**
 
 ## Agreed Procedure
 Stand up Procedure: 
