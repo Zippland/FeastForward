@@ -1,6 +1,6 @@
 # Group 22
 
-## Team Meeting 2 - Week 8 - 26/04/2024 (1:30pm - 4:30pm)
+## Team Meeting 2 - Week 8 - 07/05/2024 (1:30pm - 4:30pm)
 **Absent: 0**
 <br>
 **Lead/scribe: Zhongyi Ding**
