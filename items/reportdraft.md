@@ -129,9 +129,10 @@ This is an important section of your report and should include all technical dec
 - Details about the parser (describe the formal grammar and language used)
 
 - Decisions made (e.g., explain why you chose one or another data structure, why you used a specific data model, etc.)
-1. *The search recipe function use arraylist to store large quantity of recipes from .JSON and .CSV files, it is easy to realize but consume time to compute, so new thread was created to make it work in the back ground.*
-2. * *
-3. * *
+1. *The search recipe function uses an ArrayList to store large quantities of recipes from .JSON and .CSV files, it is simple to compute and it could be memory-intensive with very large datasets and fast access times, so a new thread was created to make it work in the background.*
+2. *Implementing a method to calculate the similarity between the user's input and ingredients in the dataset using the edit distance algorithm, so the application can perform fuzzy matching of ingredients.
+allows for more flexible searches, accommodating minor typos or different spellings in ingredient names.*
+3. *The ExpiredFoodAlert function manages food expiry data with dynamic loading (use userID) and responsive Toast messages.*
 
 - Details about the design patterns used (where in the code, justification of the choice, etc)
 
@@ -219,21 +220,27 @@ Production Rules:
    <br>
 
 ### Custom Features
-Feature Category: Privacy <br>
-1. [Privacy-Request]. Description of the feature  (easy)
+Feature Category: Search-related features <br>
+1. [Search-Filter]. Description of the feature  (easy)
    * Code: [Class X, methods Z, Y](https://gitlab.cecs.anu.edu.au/comp2100/group-project/ga-23s2/-/blob/main/items/media/_examples/Dummy.java#L22-43) and Class Y, ...
    * Description of your implementation: ... <br>
      <br>
 
-2. [Privacy-Block]. Description ... ... (medium)
+2. [ ]. Description ... ... (medium)
    ... ...
    <br><br>
 
-Feature Category: Firebase Integration <br>
-3. [FB-Auth] Description of the feature (easy)
+Feature Category: UI Design and Testing <br>
+3. [UI-Layout] Description of the feature (easy)
    * Code: [Class X, entire file](https://gitlab.cecs.anu.edu.au/comp2100/group-project/ga-23s2/-/blob/main/items/media/_examples/Dummy.java#L22-43) and Class Y, ...
    * [Class B](../src/path/to/class/file.java#L30-85): methods A, B, C, lines of code: 30 to 85
    * Description of your implementation: ... <br>
+
+Feature Category: Greater Data Usage, Handling and Sophistication <br>
+4. [Data-Formats] Read recipes from .JSON and .CSV file (easy)
+<br>
+5. [Data-Profile] Give every user a profile after login (easy)
+<br>
 
 <hr>
 
@@ -289,8 +296,8 @@ Feature Category: Firebase Integration <br>
 * Your meetings should also have a reasonable date spanning across Week 6 to 11.*
 
 
-- *[Team Meeting 1](meeting-template.md)*
-- ...
+- *[Team Meeting 1](/meeting1.md)*
+- [Team Meeting 2](/meeting2.md)
 - ...
 - [Team Meeting 4](link_to_md_file.md)
 - ... (Add any descriptions if needed) ...
