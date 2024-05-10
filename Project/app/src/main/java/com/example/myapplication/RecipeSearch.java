@@ -103,9 +103,33 @@ public class RecipeSearch extends AppCompatActivity {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 String name = jsonObject.getString("Name");
                 JSONArray ingredientsArray = jsonObject.getJSONArray("Ingredients");
-                String ingredients = ingredientsArray.join("\n");
+
+                Tokenizer tokenizer = new Tokenizer();
+                List<String>[] separatedIngredients = tokenizer.tokenize(ingredientsArray);
+
+                Parser parser = new Parser();
+                List<String> sortedIngredients = parser.parse(separatedIngredients);
+
+                // Reconstruct the ingredients string
+                StringBuilder ingredientsBuilder = new StringBuilder();
+                for (String ingredient : sortedIngredients) {
+                    ingredientsBuilder.append(ingredient).append("\n");
+                }
+                String ingredients = ingredientsBuilder.toString().trim();
+
+
                 JSONArray methodArray = jsonObject.getJSONArray("Method");
-                String method = methodArray.join("\n");
+                // Pass methodArray to Tokenizer
+                List<String> mergedMethods = tokenizer.tokenizeMethods(methodArray);
+
+                // Reconstruct the methods string
+                StringBuilder methodsBuilder = new StringBuilder();
+                for (String method : mergedMethods) {
+                    methodsBuilder.append(method).append("\n");
+                }
+                String method = methodsBuilder.toString().trim();
+
+
                 String recipe = name + ": \n\nIngredients - " + ingredients + ". \n\nDirections - " + method + ".";
                 recipes.add(recipe);
 
@@ -114,6 +138,7 @@ public class RecipeSearch extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
     private void loadFromCsv(){
         // Load the recipes data from the csv file
         // csv url: https://www.kaggle.com/datasets/thedevastator/better-recipes-for-a-better-life
