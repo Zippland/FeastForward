@@ -1,7 +1,8 @@
-Food Name,Expiry Date,UserId,IsShared
-Milk,2024-05-12,1,yes
-Eggs,2024-05-10,3,no
-Butter,2024-05-09,3,yes
-Fish,2024-05-30,3,yes
-Cheese,2024-05-09,4,no
-Bread,2024-05-09,1,yes
+Food Name,Expiry Date,UserId,IsShared,UserName
+Milk,2024-05-12,1,yes,comp2100@anu.edu.au
+Eggs,2024-05-10,3,no,a
+Butter,2024-05-09,3,yes,a
+Fish,2024-05-30,3,yes,a
+Apple,2024-05-29,3,yes,a
+Bread,2024-05-09,1,no,comp2100@anu.edu.au
+Beef,2024-05-12,2,yes,comp6442@anu.edu.au

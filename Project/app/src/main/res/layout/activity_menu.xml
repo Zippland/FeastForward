@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     tools:context=".ExpiredFoodAlert">
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -32,26 +31,23 @@
             android:text="Own Food"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="40dp" />
+            android:layout_marginTop="20dp" />
 
-        <!-- Table Header -->
+        <!-- Table for Own Food -->
         <TableLayout
             android:id="@+id/tblFoodExpiry"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/ownFood"
-            android:stretchColumns="1"
+            android:stretchColumns="*"
             android:layout_marginTop="10dp"
             android:gravity="center">
-
-            <!-- Table Header Row -->
+            <!-- Table Header Row for Own Food -->
             <TableRow
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -77,9 +73,58 @@
                     android:gravity="center"
                     android:padding="8dp" />
             </TableRow>
+        </TableLayout>
 
+        <!-- Label for Shared Food -->
+        <TextView
+            android:id="@+id/tvSharedFood"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Shared Food"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/tblFoodExpiry"
+            android:layout_marginTop="20dp" />
+
+        <!-- Table for Shared Food -->
+        <TableLayout
+            android:id="@+id/tblSharedFood"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvSharedFood"
+            android:stretchColumns="*"
+            android:layout_marginTop="10dp">
+            <!-- Table Header Row for Shared Food -->
+            <TableRow
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Shared User"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:padding="8dp" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Food Name"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:padding="8dp" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Expiry Date"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:padding="8dp" />
+            </TableRow>
         </TableLayout>
     </RelativeLayout>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
