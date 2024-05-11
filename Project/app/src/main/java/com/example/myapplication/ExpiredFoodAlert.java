@@ -2,8 +2,12 @@ package com.example.myapplication;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -89,43 +93,81 @@ public class ExpiredFoodAlert extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         while ((line = reader.readLine()) != null) {
             String[] tokens = line.split(",");
-            if (tokens.length >= 3) {
+            if (tokens.length >= 4) {
                 String foodName = tokens[0];
                 String expiryDate = tokens[1];
                 String readUserId = tokens[2];
+                String isShared = tokens[3];
                 try {
                     if (userId == Integer.parseInt(readUserId)) {
-                        addRowToTable(foodName, expiryDate);
+                        addRowToTable(foodName, expiryDate, isShared);
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             }
         }
         reader.close();
     }
 
-    private void addRowToTable(String foodName, String expiryDate) {
+
+    private void addRowToTable(String foodName, String expiryDate, String isShared) {
         TableRow row = new TableRow(this);
-        row.setGravity(android.view.Gravity.CENTER);
+        row.setGravity(Gravity.CENTER);
 
         TextView foodTextView = new TextView(this);
         foodTextView.setText(foodName);
-        foodTextView.setGravity(android.view.Gravity.CENTER);
+        foodTextView.setGravity(Gravity.CENTER);
         foodTextView.setPadding(8, 8, 8, 8);
         foodTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1));
 
         TextView expiryTextView = new TextView(this);
         expiryTextView.setText(expiryDate);
-        expiryTextView.setGravity(android.view.Gravity.CENTER);
+        expiryTextView.setGravity(Gravity.CENTER);
         expiryTextView.setPadding(8, 8, 8, 8);
         expiryTextView.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1));
 
+        // Create buttons
+        Button deleteButton = new Button(this);
+        deleteButton.setText("Delete");
+        deleteButton.setOnClickListener(v -> {
+            try {
+                deleteFoodItem(foodName); // Adjust this method as needed
+                tableLayout.removeView(row); // Remove the row from the table
+                Toast.makeText(this, "Item deleted.", Toast.LENGTH_SHORT).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        Button shareButton = new Button(this);
+        shareButton.setText("Share");
+        if ("yes".equalsIgnoreCase(isShared)) {
+            shareButton.setEnabled(false); // Disable button if the item is already shared
+        } else {
+            shareButton.setOnClickListener(v -> {
+                shareFoodItem(foodName); // Implement this method to handle sharing logic
+            });
+        }
+
+        // Adding buttons to the row
         row.addView(foodTextView);
         row.addView(expiryTextView);
+        row.addView(deleteButton);
+        row.addView(shareButton);
 
         tableLayout.addView(row);
+    }
+
+
+
+    private void shareFoodItem(String foodName) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out this food item: " + foodName);
+        sendIntent.setType("text/plain");
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        startActivity(shareIntent);
     }
 
 
@@ -140,7 +182,7 @@ public class ExpiredFoodAlert extends AppCompatActivity {
 
         while ((line = reader.readLine()) != null) {
             String[] tokens = line.split(",");
-            if (tokens.length >= 3) {
+            if (tokens.length >= 4) {
                 String foodName = tokens[0];
                 String readUserId = tokens[2];
 
@@ -162,38 +204,12 @@ public class ExpiredFoodAlert extends AppCompatActivity {
     private void showExpiryAlert(String foodName, String expiryDate) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Expiration Alert");
-        builder.setMessage("The food item " + foodName + " is near expiration (expires on: " + expiryDate + "). Click OK to view details.");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                viewFoodItem(foodName);
-            }
-        });
-        builder.setNegativeButton("Cancel", null);
+        builder.setMessage("The food item " + foodName + " is near expiration (expires on: " + expiryDate + ").");
+        builder.setNegativeButton("Ok", null);
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
-    private void viewFoodItem(String foodName) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Food Details");
-        builder.setMessage("Showing details for: " + foodName);
-        builder.setPositiveButton("OK", null);
-        builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                try {
-                    deleteFoodItem(foodName);
-                    Toast.makeText(ExpiredFoodAlert.this, "Food item deleted successfully.", Toast.LENGTH_LONG).show();
-                } catch (IOException e) {
-                    Toast.makeText(ExpiredFoodAlert.this, "Error deleting food item.", Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                }
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
 
     private void deleteFoodItem(String foodName) throws IOException {
         File foodDataFile = new File(getFilesDir(), "food_data.csv");
