@@ -43,43 +43,49 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Centrally aligned navigation buttons with aesthetic spacing -->
+
     <Button
         android:id="@+id/btnRecipeSearch"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Discover Recipes"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="80dp"
         android:background="@drawable/button_style"
-        app:layout_constraintTop_toBottomOf="@id/userDescription"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="Discover Recipes"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="64dp"
-        android:layout_marginEnd="64dp" />
+        app:layout_constraintHorizontal_bias="0.773"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/userDescription" />
 
     <Button
         android:id="@+id/btnDataActivity"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Manage Food Inventory"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="80dp"
         android:background="@drawable/button_style"
-        app:layout_constraintTop_toBottomOf="@id/btnRecipeSearch"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="Manage Food Inventory"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="64dp"
-        android:layout_marginEnd="64dp" />
+        app:layout_constraintHorizontal_bias="0.489"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnRecipeSearch" />
 
     <Button
         android:id="@+id/btnExpireFoodAlert"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Expiration Alerts"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="80dp"
         android:background="@drawable/button_style_secondary"
-        app:layout_constraintTop_toBottomOf="@id/btnDataActivity"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="Expiration Alerts"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="64dp"
-        android:layout_marginEnd="64dp" />
+        app:layout_constraintHorizontal_bias="0.75"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnDataActivity" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
