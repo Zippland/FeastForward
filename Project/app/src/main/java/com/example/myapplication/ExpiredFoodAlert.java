@@ -199,14 +199,27 @@ public class ExpiredFoodAlert extends AppCompatActivity {
         TableRow.LayoutParams buttonParams = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1);
         buttonParams.setMargins(4, 4, 2, 4); // Adjusted margins
         deleteButton.setLayoutParams(buttonParams);
+        // Configure the delete button to show a confirmation dialog
         deleteButton.setOnClickListener(v -> {
-            try {
-                deleteFoodItem(foodName); // Delete the food item
-                tableLayout.removeView(row); // Remove the row from the table
-                Toast.makeText(this, "Item deleted.", Toast.LENGTH_SHORT).show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Confirm Delete");
+            builder.setMessage("Are you sure you want to delete the item: " + foodName + "?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    try {
+                        deleteFoodItem(foodName); // Delete the food item
+                        tableLayout.removeView(row); // Remove the row from the table
+                        Toast.makeText(ExpiredFoodAlert.this, "Item deleted.", Toast.LENGTH_SHORT).show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(ExpiredFoodAlert.this, "Error deleting the item.", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+            builder.setNegativeButton("No", null); // Do nothing on "No"
+            AlertDialog dialog = builder.create();
+            dialog.show();
         });
 
         Button shareButton = new Button(this);
