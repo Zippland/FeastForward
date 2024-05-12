@@ -233,7 +233,7 @@ public class ExpiredFoodAlert extends AppCompatActivity {
             shareButton.setEnabled(false); // Disable button if the item is already shared
         } else {
             shareButton.setOnClickListener(v -> {
-                shareFoodItem(foodName); // Share the food item
+                shareFoodItem(foodName, shareButton); // Share the food item
             });
         }
 
@@ -249,21 +249,23 @@ public class ExpiredFoodAlert extends AppCompatActivity {
 
 
 
-    private void shareFoodItem(String foodName) {
+    private void shareFoodItem(String foodName, Button shareButton) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Share Food");
         builder.setMessage("Are you sure you want to share the food with others?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out this food item: " + foodName);
-                sendIntent.setType("text/plain");
-                Intent shareIntent = Intent.createChooser(sendIntent, null);
-                startActivity(shareIntent);
+//                Intent sendIntent = new Intent();
+//                sendIntent.setAction(Intent.ACTION_SEND);
+//                sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out this food item: " + foodName);
+//                sendIntent.setType("text/plain");
+//                Intent shareIntent = Intent.createChooser(sendIntent, null);
+//                startActivity(shareIntent);
                 try {
-                    updateFoodSharedStatus(foodName);
+                    updateFoodSharedStatus(foodName); // Update the shared status in the file
+                    shareButton.setEnabled(false); // Disable the share button
+                    Toast.makeText(ExpiredFoodAlert.this, "Food shared successfully.", Toast.LENGTH_SHORT).show();
                 } catch (IOException e) {
                     Toast.makeText(ExpiredFoodAlert.this, "Error updating food share status.", Toast.LENGTH_LONG).show();
                     e.printStackTrace();
@@ -274,6 +276,7 @@ public class ExpiredFoodAlert extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
 
     private void updateFoodSharedStatus(String foodName) throws IOException {
         File foodDataFile = new File(getFilesDir(), "food_data.csv");
