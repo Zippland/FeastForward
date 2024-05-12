@@ -3,31 +3,13 @@ package com.example.myapplication;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TimePicker;
-import android.widget.Toast;
 
-import com.example.myapplication.FileHelper;
 import com.example.myapplication.Utils.DataUtil;
-import com.google.android.material.snackbar.Snackbar;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.ref.Cleaner;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 public class DataActivity extends AppCompatActivity {
 
@@ -64,14 +46,14 @@ public class DataActivity extends AppCompatActivity {
         //Read all data and display
         Button displayButton = findViewById(R.id.display_button);
         displayButton.setOnClickListener(v -> {
-            Intent intent = new Intent(this, RecipesShowActivity.class);
+            Intent intent = new Intent(this, FoodShowActivity.class);
             startActivity(intent);
         });
 
         Button searchButton = findViewById(R.id.button);
         //search
         searchButton.setOnClickListener(v -> {
-            Intent intent = new Intent(this, RecipeSearchActivity.class);
+            Intent intent = new Intent(this, FoodSearchActivity.class);
             startActivity(intent);
         });
     }

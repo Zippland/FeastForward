@@ -3,7 +3,6 @@ package com.example.myapplication;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SearchView;
@@ -25,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class RecipeSearchActivity extends AppCompatActivity {
+public class FoodSearchActivity extends AppCompatActivity {
     SearchView recipeSearch;
     RecyclerView recipeSearchList;
     RecipeAdapter recipeAdapter;

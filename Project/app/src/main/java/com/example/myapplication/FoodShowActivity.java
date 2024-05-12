@@ -21,16 +21,9 @@ import com.example.myapplication.Adapter.RecipeAdapter;
 import com.example.myapplication.Utils.DataUtil;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
 import java.util.List;
 
-public class RecipesShowActivity extends AppCompatActivity {
+public class FoodShowActivity extends AppCompatActivity {
     RecyclerView recipesList;
 
     RecipeAdapter recipeAdapter;
