@@ -14,10 +14,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import java.io.*;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 public class ExpiredFoodAlert extends AppCompatActivity {
     private int userId;
@@ -89,12 +91,63 @@ public class ExpiredFoodAlert extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+    //start of a modified version populateTableWithUserData using BST
+    class TreeNode {
+        String foodName;
+        Date expiryDate;
+        String isShared;
+        TreeNode left, right;
+
+        public TreeNode(String foodName, Date expiryDate, String isShared) {
+            this.foodName = foodName;
+            this.expiryDate = expiryDate;
+            this.isShared = isShared;
+            this.left = null;
+            this.right = null;
+        }
+    }
+
+    class BinarySearchTree {
+        private TreeNode root;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+
+        public void insert(String foodName, String expiryDateString, String isShared) throws ParseException {
+            Date expiryDate = sdf.parse(expiryDateString);
+            root = insertRec(root, foodName, expiryDate, isShared);
+        }
+
+        private TreeNode insertRec(TreeNode root, String foodName, Date expiryDate, String isShared) {
+            if (root == null) {
+                root = new TreeNode(foodName, expiryDate, isShared);
+                return root;
+            }
+            if (expiryDate.compareTo(root.expiryDate) < 0) {
+                root.left = insertRec(root.left, foodName, expiryDate, isShared);
+            } else {
+                root.right = insertRec(root.right, foodName, expiryDate, isShared);
+            }
+            return root;
+        }
+
+        public void traverseInOrder(Consumer<TreeNode> action) {
+            traverseInOrderRec(root, action);
+        }
+
+        private void traverseInOrderRec(TreeNode node, Consumer<TreeNode> action) {
+            if (node != null) {
+                traverseInOrderRec(node.left, action);
+                action.accept(node);
+                traverseInOrderRec(node.right, action);
+            }
+        }
+    }
 
     private void populateTableWithUserData() throws IOException {
         File foodDataFile = new File(getFilesDir(), "food_data.csv");
         BufferedReader reader = new BufferedReader(new FileReader(foodDataFile));
         String line;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        BinarySearchTree bst = new BinarySearchTree();
+
         while ((line = reader.readLine()) != null) {
             String[] tokens = line.split(",");
             if (tokens.length >= 5) {
@@ -104,7 +157,7 @@ public class ExpiredFoodAlert extends AppCompatActivity {
                 String isShared = tokens[3];
                 try {
                     if (userId == Integer.parseInt(readUserId)) {
-                        addRowToTable(foodName, expiryDate, isShared);
+                        bst.insert(foodName, expiryDate, isShared);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -112,7 +165,13 @@ public class ExpiredFoodAlert extends AppCompatActivity {
             }
         }
         reader.close();
+
+        // Traverse the tree in order and add rows to the table
+        bst.traverseInOrder(node -> {
+            addRowToTable(node.foodName, new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(node.expiryDate), node.isShared);
+        });
     }
+    // End of a modified version populateTableWithUserData using BST
 
 
     private void addRowToTable(String foodName, String expiryDate, String isShared) {
