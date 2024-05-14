@@ -297,10 +297,9 @@ Feature Category: Greater Data Usage, Handling and Sophistication <br>
 
 
 - *[Team Meeting 1](/meeting1.md)*
-- [Team Meeting 2](/meeting2.md)
-- ...
-- [Team Meeting 4](link_to_md_file.md)
-- ... (Add any descriptions if needed) ...
+- *[Team Meeting 2](/meeting2.md)*
+- *[Team Meeting 3](/meeting3.md)*
+- *[Team Meeting 4](/meeting4.md)*
 
 <hr>
 
