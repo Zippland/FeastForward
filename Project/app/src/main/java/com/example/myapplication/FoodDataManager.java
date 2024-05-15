@@ -11,6 +11,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * FoodDataManager is responsible for managing food data, including retrieving user-specific data,
+ * shared data, near expiry items, and updating or deleting food items.
+ *
+ * @author Baizhen Lin u7770074
+ */
 public class FoodDataManager {
 
     public int userId;
@@ -18,12 +24,26 @@ public class FoodDataManager {
     public WriterProvider writerProvider;
     public SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
+    /**
+     * Constructor to initialize FoodDataManager.
+     *
+     * @param userId         the user ID of the current user
+     * @param readerProvider the provider for BufferedReader
+     * @param writerProvider the provider for BufferedWriter
+     */
     public FoodDataManager(int userId, ReaderProvider readerProvider, WriterProvider writerProvider) {
         this.userId = userId;
         this.readerProvider = readerProvider;
         this.writerProvider = writerProvider;
     }
 
+    /**
+     * Retrieves the food data for the current user from the specified file.
+     *
+     * @param foodDataFile the file containing food data
+     * @return a list of food data entries for the user
+     * @throws IOException if an I/O error occurs
+     */
     public List<String[]> getUserData(File foodDataFile) throws IOException {
         BufferedReader reader = null;
         try {
@@ -56,6 +76,13 @@ public class FoodDataManager {
         }
     }
 
+    /**
+     * Retrieves the shared food data from the specified file.
+     *
+     * @param foodDataFile the file containing food data
+     * @return a list of shared food data entries
+     * @throws IOException if an I/O error occurs
+     */
     public List<String[]> getSharedData(File foodDataFile) throws IOException {
         BufferedReader reader = null;
         try {
@@ -85,6 +112,14 @@ public class FoodDataManager {
         }
     }
 
+    /**
+     * Retrieves the food items that are near expiry for the current user from the specified file.
+     *
+     * @param foodDataFile the file containing food data
+     * @return a list of near expiry food items
+     * @throws IOException if an I/O error occurs
+     * @throws ParseException if the date format is invalid
+     */
     public List<String[]> getNearExpiryItems(File foodDataFile) throws IOException, ParseException {
         BufferedReader reader = null;
         try {
@@ -102,11 +137,8 @@ public class FoodDataManager {
                     String readUserId = tokens[2];
                     if (userId == Integer.parseInt(readUserId)) {
                         Date expiryDate = sdf.parse(tokens[1]);
-                        System.out.println("Expiry date for " + tokens[0] + ": " + expiryDate);
-                        System.out.println("Current date: " + new Date(now));
                         if (expiryDate != null && (expiryDate.getTime() - now) <= threeDaysInMs) {
                             nearExpiryItems.add(tokens);
-                            System.out.println("Added near expiry item: " + tokens[0]);
                         }
                     }
                 }
@@ -126,6 +158,13 @@ public class FoodDataManager {
         }
     }
 
+    /**
+     * Updates the shared status of a food item for the current user in the specified file.
+     *
+     * @param foodDataFile the file containing food data
+     * @param foodName     the name of the food item to update
+     * @throws IOException if an I/O error occurs
+     */
     public void updateFoodSharedStatus(File foodDataFile, String foodName) throws IOException {
         BufferedReader reader = null;
         BufferedWriter writer = null;
@@ -172,6 +211,13 @@ public class FoodDataManager {
         }
     }
 
+    /**
+     * Deletes a food item for the current user from the specified file.
+     *
+     * @param foodDataFile the file containing food data
+     * @param foodName     the name of the food item to delete
+     * @throws IOException if an I/O error occurs
+     */
     public void deleteFoodItem(File foodDataFile, String foodName) throws IOException {
         BufferedReader reader = null;
         BufferedWriter writer = null;
@@ -216,14 +262,23 @@ public class FoodDataManager {
         }
     }
 
+    /**
+     * Interface for providing BufferedReader.
+     */
     public interface ReaderProvider {
         BufferedReader getBufferedReader(File file) throws IOException;
     }
 
+    /**
+     * Interface for providing BufferedWriter.
+     */
     public interface WriterProvider {
         BufferedWriter getBufferedWriter(File file) throws IOException;
     }
 
+    /**
+     * Default implementation of ReaderProvider.
+     */
     public static class DefaultReaderProvider implements ReaderProvider {
         @Override
         public BufferedReader getBufferedReader(File file) throws IOException {
@@ -231,6 +286,9 @@ public class FoodDataManager {
         }
     }
 
+    /**
+     * Default implementation of WriterProvider.
+     */
     public static class DefaultWriterProvider implements WriterProvider {
         @Override
         public BufferedWriter getBufferedWriter(File file) throws IOException {

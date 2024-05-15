@@ -16,24 +16,37 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Unit tests for FoodDataManager class.
+ *
+ * @author Baizhen Lin
+ */
 public class FoodDataManagerTest {
 
     private FoodDataManager foodDataManager;
     private String sampleCsvData;
     private StringWriter stringWriter;
 
+    /**
+     * Sets up the test environment before each test.
+     */
     @Before
     public void setup() {
+        // Sample CSV data for testing
         sampleCsvData = "Food Name,Expiry Date,UserId,IsShared,UserName\n" +
                 "Apple,2024-05-10,1,no,User1\n" +
                 "Banana,2024-05-12,1,yes,User1\n" +
                 "Carrot,2024-05-11,2,no,User2";
 
+        // StringWriter to capture changes to the sample data
         stringWriter = new StringWriter();
 
+        // Initialize FoodDataManager with test data
         foodDataManager = new FoodDataManager(
                 1, // userId
+                // Reader provider using the sample CSV data
                 file -> new BufferedReader(new StringReader(sampleCsvData)),
+                // Writer provider updating the sample data with changes
                 file -> new BufferedWriter(stringWriter) {
                     @Override
                     public void close() throws IOException {
@@ -44,6 +57,11 @@ public class FoodDataManagerTest {
         );
     }
 
+    /**
+     * Tests retrieval of user-specific food data.
+     *
+     * @throws IOException if an I/O error occurs
+     */
     @Test
     public void testGetUserData() throws IOException {
         List<String[]> userData = foodDataManager.getUserData(new File("dummy"));
@@ -52,12 +70,23 @@ public class FoodDataManagerTest {
         assertEquals("Banana", userData.get(1)[0]);
     }
 
+    /**
+     * Tests retrieval of shared food data.
+     *
+     * @throws IOException if an I/O error occurs
+     */
     @Test
     public void testGetSharedData() throws IOException {
         List<String[]> sharedData = foodDataManager.getSharedData(new File("dummy"));
         assertEquals(0, sharedData.size()); // UserId 1 shared items should not be included
     }
 
+    /**
+     * Tests retrieval of near-expiry food items.
+     *
+     * @throws IOException if an I/O error occurs
+     * @throws ParseException if the date format is invalid
+     */
     @Test
     public void testGetNearExpiryItems() throws IOException, ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
@@ -69,6 +98,7 @@ public class FoodDataManagerTest {
                 "Banana,2024-05-09,1,yes,User1\n" +
                 "Carrot,2024-05-08,2,no,User2";
 
+        // Reader provider with near-expiry test data
         foodDataManager.readerProvider = file -> new BufferedReader(new StringReader(nearExpiryCsvData));
 
         List<String[]> nearExpiryItems = foodDataManager.getNearExpiryItems(new File("dummy"));
@@ -76,6 +106,11 @@ public class FoodDataManagerTest {
         assertEquals("Banana", nearExpiryItems.get(1)[0]);
     }
 
+    /**
+     * Tests updating the shared status of a food item.
+     *
+     * @throws IOException if an I/O error occurs
+     */
     @Test
     public void testUpdateFoodSharedStatus() throws IOException {
         foodDataManager.updateFoodSharedStatus(new File("dummy"), "Apple");
@@ -83,6 +118,11 @@ public class FoodDataManagerTest {
         assertEquals("yes", userData.get(0)[3]);
     }
 
+    /**
+     * Tests deleting a food item.
+     *
+     * @throws IOException if an I/O error occurs
+     */
     @Test
     public void testDeleteFoodItem() throws IOException {
         foodDataManager.deleteFoodItem(new File("dummy"), "Apple");
