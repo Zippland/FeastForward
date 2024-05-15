@@ -85,7 +85,7 @@ public class DataUtil {
                     try {
                         recipe.setUserId(Integer.parseInt(parts[2]));
                     } catch (NumberFormatException e) {
-                        //错误数据，跳过检索
+                        //Error data, skip search
                         continue;
                     }
                     result.add(recipe);
