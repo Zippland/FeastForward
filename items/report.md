@@ -271,8 +271,67 @@ Feature Category: Firebase Integration <br>
    - *Code coverage: ...*
    - *Types of tests created and descriptions: ...*
 
-2. xxx
+2. Tests for FoodDataManager
 
+   - Code: FoodDataManagerTest Class
+
+   - Number of Test Cases: 12
+
+   - Code Coverage: Line: 69%(96/138)
+
+   - Types of Tests Created and Descriptions:
+
+      -  testGetUserData:
+         - Purpose: Verify that the user-specific food data is correctly retrieved.
+         - Details: This test checks that the correct number of items are retrieved for a specific user and that the data matches the expected values.
+
+      - testGetSharedData:
+         - Purpose: Verify that shared food data is correctly retrieved.
+         - Details: This test ensures that the shared food items are correctly filtered and do not include items shared by the current user (userId 1).
+
+      - testGetNearExpiryItems:
+         - Purpose: Verify that near-expiry food items are correctly identified.
+         - Details: This test uses a different sample CSV data set with adjusted dates to check the near-expiry logic, ensuring that items expiring soon are correctly flagged.
+
+      - testUpdateFoodSharedStatus:
+         - Purpose: Verify that the shared status of a food item is correctly updated.
+         - Details: This test updates the shared status of a specific food item and checks that the status is correctly reflected in the sample data.
+
+      - testDeleteFoodItem:
+         - Purpose: Verify that a food item is correctly deleted.
+         - Details: This test deletes a specific food item from the sample data and checks that the item is removed and the remaining data is as expected.
+
+      - testGetUserDataInvalidUser:
+         - Purpose: Verify that no data is retrieved for an invalid user ID.
+         - Details: This test sets an invalid user ID and checks that no data is returned.
+
+      - testGetNoNearExpiryItems:
+         - Purpose: Verify that no items are flagged as near expiry when their dates are far in the future.
+         - Details: This test uses a dataset where all expiry dates are beyond the near-expiry threshold.
+
+      - testGetSharedDataIncludesOthers:
+         - Purpose: Verify that shared data retrieval includes items shared by other users.
+         - Details: This test includes items shared by other users and checks that they are correctly retrieved.
+
+      - testGetUserDataEmpty:
+         - Purpose: Verify that no data is retrieved from an empty CSV file.
+         - Details: This test uses an empty CSV file to check that no data is returned.
+
+      - testGetUserDataMissingFields:
+         - Purpose: Verify that data retrieval handles missing fields correctly.
+          -Details: This test includes a row with missing fields to check if the method skips invalid entries.
+
+      - testUpdateFoodSharedStatusNonExisting:
+         - Purpose: Verify that updating the shared status of a non-existing food item does not alter existing data.
+         - Details: This test attempts to update a non-existing food item and checks that existing data remains unchanged.
+
+      - testDeleteFoodItemNonExisting:
+         - Purpose: Verify that deleting a non-existing food item does not alter existing data.
+         - Details: This test attempts to delete a non-existing food item and checks that existing data remains unchanged.
+
+      - testGetSharedDataIncludesOthers:
+         - Purpose: Verify that shared data retrieval includes items shared by other users.
+         - Details: This test includes items shared by other users and checks that they are correctly retrieved.
 ...
 
 <br> <hr>
