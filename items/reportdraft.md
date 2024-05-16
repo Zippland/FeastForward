@@ -156,7 +156,17 @@ Here is a partial (short) example for the subsection `Data Structures`:*
       * *We don't need to access the item by index for xxx feature because...*
       * For the (part), the data ... (characteristics) ...
 
-2. ...
+2. *Binary Search Tree*
+   * *Objective: The binary search tree (BST) was used for storing and organizing food items by their expiry dates to support efficient retrieval, insertion, and traversal operations, particularly for the feature of displaying food items in order of expiry.*
+   * *Code Locations: defined in [Class TreeNode](https://gitlab.cecs.anu.edu.au/u7705332/gp-24s1/-/blob/main/Project/app/src/main/java/com/example/myapplication/Tree/TreeNode.java?ref_type=heads) and [Class BinarySearchTree](https://gitlab.cecs.anu.edu.au/u7705332/gp-24s1/-/blob/main/Project/app/src/main/java/com/example/myapplication/Tree/BinarySearchTree.java?ref_type=heads)*
+   *  *Reasons:*
+      *  *Efficiency: The BST allows for efficient insertion and retrieval of food items based on their expiry dates. Insertion and search operations have an average time complexity of O(log n), which is more efficient than a linear data structure for the large datasets expected in this application.*
+      *	*Order Maintenance: The in-order traversal of a BST naturally produces items in ascending order, which is particularly useful for displaying food items by their expiry dates.*
+      *	*Flexibility: The hierarchical structure of the BST supports dynamic insertion and deletion of food items without the need for reorganization of the entire dataset, which is ideal for the app's requirement to frequently update the food inventory.*
+      *	*Insertion: Each food item is inserted into the BST based on its expiry date, ensuring that the tree remains balanced for optimal performance.*
+      *	*Traversal: The BST is traversed in order to display food items in ascending order of their expiry dates, providing a clear and organized view for users.*
+      *	*Scalability: The BST structure can handle large datasets efficiently, making it suitable for applications with a substantial number of food items.*
+
 
 3. ...
 
@@ -214,7 +224,23 @@ Production Rules:
 
 3. [LoadShowData]...
 
-4. [DataStream]...
+4. [DataStream] Create data instances to simulate users’ actions and interactions, which are then used
+to feed the app so that when a user is logged in, these data are loaded at regular time intervals and
+visualised on the app. (medium)
+   * Code: [Class FoodDataManager](https://gitlab.cecs.anu.edu.au/u7705332/gp-24s1/-/blob/main/Project/app/src/main/java/com/example/myapplication/FoodDataManager.java?ref_type=heads)
+   * Description of feature: 
+      * User Data Retrieval: Retrieves the food data entries specific to the current user.
+      *	Shared Data Retrieval: Retrieves the food data entries that have been shared by other users.
+      *	Near Expiry Items Retrieval: Identifies food items that are near their expiry dates.
+      *	Food Item Update: Updates the shared status of a food item for the current user.
+      *	Food Item Deletion: Deletes a specific food item from the user's food data. <br>
+   * Description of your implementation:
+      *	User Data Retrieval: Implemented a method that reads food data from a CSV file and filters entries based on the current user ID. This method uses a BufferedReader provided by the ReaderProvider interface to read the file.
+      *	Near Expiry Items Retrieval: Developed a method that calculates the time difference between the current date and the expiry dates of the food items. It identifies items that are due to expire within the next three days. This method uses the SimpleDateFormat class to parse dates.
+      *	Food Item Update: Created a method that reads the CSV file, updates the shared status of a specified food item, and writes the changes back to the file using a BufferedWriter provided by the WriterProvider interface.
+      *	Food Item Deletion: Developed a method that reads the CSV file, removes a specified food item, and writes the remaining data back to the file using a BufferedWriter provided by the WriterProvider interface.
+      *	Interfaces for File I/O: Defined ReaderProvider and WriterProvider interfaces to provide BufferedReader and BufferedWriter instances. Implemented default providers that use java.io.FileReader and java.io.FileWriter. <br>
+
 
 5. [Search]...
    <br>
@@ -241,6 +267,14 @@ Feature Category: Greater Data Usage, Handling and Sophistication <br>
 <br>
 5. [Data-Profile] Give every user a profile after login (easy)
 <br>
+
+Feature Category: User Interactivity <br>
+6. [Interact-Share] The ability to share an item with another user via private message or other channels
+within the App. [stored in-memory]. (easy)
+   * code: [Class FoodExpiredAlert](https://gitlab.cecs.anu.edu.au/u7705332/gp-24s1/-/blob/main/Project/app/src/main/java/com/example/myapplication/ExpiredFoodAlert.java?ref_type=heads)
+   * Description of your implementation: When a user selects a specific food item to share, the shared food item is stored in-memory. Other users can then retrieve this shared food data from the in-memory storage. The shared food items are displayed in the shared food table by calling the populateSharedTable and addSharedRowToTable methods. The FoodDataManager class handles the storage and retrieval of shared food items through the getSharedData and updateFoodSharedStatus methods, ensuring that shared items are correctly managed and displayed across different users.
+   <br>
+
 
 <hr>
 
@@ -281,7 +315,79 @@ Feature Category: Greater Data Usage, Handling and Sophistication <br>
    - *Code coverage: ...*
    - *Types of tests created and descriptions: ...*
 
-2. xxx
+2. Tests for FoodDataManager
+
+   - Code: FoodDataManagerTest Class
+
+   - Number of Test Cases: 16
+
+   - Code Coverage: Line: 72%(100/138) Class: 100%(3/3) Method: 100%(10/10)
+
+   - Types of Tests Created and Descriptions:
+
+      - testGetUserData:
+         - Purpose: Verify that the user-specific food data is correctly retrieved.
+         - Details: This test checks that the correct number of items are retrieved for a specific user and that the data matches the expected values.
+
+      - testGetSharedData:
+         - Purpose: Verify that shared food data is correctly retrieved.
+         - Details: This test ensures that the shared food items are correctly filtered and do not include items shared by the current user (userId 1).
+
+      - testGetNearExpiryItems:
+         - Purpose: Verify that near-expiry food items are correctly identified.
+         - Details: This test uses a different sample CSV data set with adjusted dates to check the near-expiry logic, ensuring that items expiring soon are correctly flagged.
+
+      - testUpdateFoodSharedStatus:
+         - Purpose: Verify that the shared status of a food item is correctly updated.
+         - Details: This test updates the shared status of a specific food item and checks that the status is correctly reflected in the sample data.
+
+      - testDeleteFoodItem:
+         - Purpose: Verify that a food item is correctly deleted.
+         - Details: This test deletes a specific food item from the sample data and checks that the item is removed and the remaining data is as expected.
+
+      - testGetUserDataInvalidUser:
+         - Purpose: Verify that no data is retrieved for an invalid user ID.
+         - Details: This test sets an invalid user ID and checks that no data is returned.
+
+      - testGetNoNearExpiryItems:
+         - Purpose: Verify that no items are flagged as near expiry when their dates are far in the future.
+         - Details: This test uses a dataset where all expiry dates are beyond the near-expiry threshold.
+
+      - testGetSharedDataIncludesOthers:
+         - Purpose: Verify that shared data retrieval includes items shared by other users.
+         - Details: This test includes items shared by other users and checks that they are correctly retrieved.
+
+      - testGetUserDataEmpty:
+         - Purpose: Verify that no data is retrieved from an empty CSV file.
+         - Details: This test uses an empty CSV file to check that no data is returned.
+
+      - testGetUserDataMissingFields:
+         - Purpose: Verify that data retrieval handles missing fields correctly.
+         - Details: This test includes a row with missing fields to check if the method skips invalid entries.
+
+      - testUpdateFoodSharedStatusNonExisting:
+         - Purpose: Verify that updating the shared status of a non-existing food item does not alter existing data.
+         - Details: This test attempts to update a non-existing food item and checks that existing data remains unchanged.
+
+      - testDeleteFoodItemNonExisting:
+         - Purpose: Verify that deleting a non-existing food item does not alter existing data.
+         - Details: This test attempts to delete a non-existing food item and checks that existing data remains unchanged.
+
+      - testDefaultReaderProvider:
+         - Purpose: Verify that DefaultReaderProvider correctly reads from a file.
+         - Details: This test checks that the DefaultReaderProvider can successfully read from a file and that the data matches the expected values.
+
+      - testDefaultWriterProvider:
+         - Purpose: Verify that DefaultWriterProvider correctly writes to a file.
+         - Details: This test checks that the DefaultWriterProvider can successfully write to a file and that the data matches the expected values.
+
+      - testDefaultReaderProviderDirectory:
+         - Purpose: Verify that DefaultReaderProvider throws an IOException when attempting to read from a directory.
+         - Details: This test ensures that an IOException is thrown when the DefaultReaderProvider tries to read from a directory.
+
+      - testDefaultWriterProviderFileNotWritable:
+         - Purpose: Verify that DefaultWriterProvider throws an IOException when attempting to write to a read-only file.
+         - Details: This test ensures that an IOException is thrown when the DefaultWriterProvider tries to write to a read-only file.
 
 ...
 
