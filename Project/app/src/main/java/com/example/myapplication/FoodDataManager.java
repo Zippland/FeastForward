@@ -1,5 +1,7 @@
 package com.example.myapplication;
 
+import com.example.myapplication.Tree.BinarySearchTree;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -23,6 +25,7 @@ public class FoodDataManager {
     public ReaderProvider readerProvider;
     public WriterProvider writerProvider;
     public SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    private BinarySearchTree bst;
 
     /**
      * Constructor to initialize FoodDataManager.
@@ -35,20 +38,20 @@ public class FoodDataManager {
         this.userId = userId;
         this.readerProvider = readerProvider;
         this.writerProvider = writerProvider;
+        this.bst = new BinarySearchTree();
     }
 
     /**
      * Retrieves the food data for the current user from the specified file.
      *
      * @param foodDataFile the file containing food data
-     * @return a list of food data entries for the user
+     * @return a binary search tree with food data entries for the user
      * @throws IOException if an I/O error occurs
      */
-    public List<String[]> getUserData(File foodDataFile) throws IOException {
+    public BinarySearchTree getUserData(File foodDataFile) throws IOException, ParseException {
         BufferedReader reader = null;
         try {
             reader = readerProvider.getBufferedReader(foodDataFile);
-            List<String[]> userData = new ArrayList<>();
             String line;
             reader.readLine(); // Skip header
 
@@ -57,11 +60,11 @@ public class FoodDataManager {
                 if (tokens.length >= 5) {
                     String readUserId = tokens[2];
                     if (userId == Integer.parseInt(readUserId)) {
-                        userData.add(tokens);
+                        bst.insert(tokens[0], tokens[1], tokens[3]);
                     }
                 }
             }
-            return userData;
+            return bst;
         } catch (Exception e) {
             e.printStackTrace();
             throw new IOException("Error reading user data", e);
@@ -295,4 +298,5 @@ public class FoodDataManager {
             return new BufferedWriter(new java.io.FileWriter(file, false));
         }
     }
+
 }

@@ -1,10 +1,10 @@
 package com.example.myapplication;
 
+import com.example.myapplication.Tree.BinarySearchTree;
+
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Gravity;
-import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -97,13 +97,11 @@ public class ExpiredFoodAlert extends AppCompatActivity {
      *
      * @throws IOException if an I/O error occurs
      */
-    private void populateTableWithUserData() throws IOException {
+    private void populateTableWithUserData() throws IOException, ParseException {
         File foodDataFile = getFoodDataFile();
-        List<String[]> userData = foodDataManager.getUserData(foodDataFile);
+        BinarySearchTree userData = foodDataManager.getUserData(foodDataFile);
 
-        for (String[] data : userData) {
-            addRowToTable(data[0], data[1], data[3]);
-        }
+        userData.traverseInOrder(node -> addRowToTable(node.foodName, foodDataManager.sdf.format(node.expiryDate), node.isShared));
     }
 
     /**
