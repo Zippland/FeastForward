@@ -1,3 +1,9 @@
+/**
+ * DESCRIPTION: This activity aims to test the RecipeSearch Activity.
+ * CONTRIBUTION: All methods are created by Zhongyi Ding.
+ * @author Zhongyi Ding u7619253
+ *
+ */
 package com.example.myapplication;
 
 import org.junit.Before;

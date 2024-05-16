@@ -1,3 +1,9 @@
+/**
+ * DESCRIPTION: This activity aims to search recipes with ingredients.
+ * CONTRIBUTION: Most methods are created by Zhongyi Ding, except calculateSimilarity and editDistance created by Yue Yu.
+ * @author Zhongyi Ding u7619253; Yue Yu u7709381
+ *
+ */
 package com.example.myapplication;
 
 import android.os.Bundle;

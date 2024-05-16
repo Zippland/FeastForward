@@ -1,3 +1,9 @@
+/**
+ * DESCRIPTION: This activity aims to show a unique user profile with an image after login, and access to main functions of the application.
+ * CONTRIBUTION: All methods are created by Zhongyi Ding.
+ * @author Zhongyi Ding u7619253
+ *
+ */
 package com.example.myapplication;
 
 import android.content.Intent;

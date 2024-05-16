@@ -1,5 +1,10 @@
+/**
+ * DESCRIPTION: This class is a copy of testable functions from RecipeSearch to avoid problem “Method myLooper in android.os.Looper not mocked”
+ * CONTRIBUTION: All methods are created by Zhongyi Ding.
+ * @author Zhongyi Ding u7619253
+ *
+ */
 
-/** this class is a copy of testable functions from RecipeSearch to avoid problem “Method myLooper in android.os.Looper not mocked” */
 package com.example.myapplication;
 
 import java.io.IOException;
