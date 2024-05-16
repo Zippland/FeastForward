@@ -12,6 +12,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
 
+/**
+ * Login page
+ *
+ * @author Zihan Jian u7174903
+ */
 public class MainActivity extends AppCompatActivity {
 
     @Override

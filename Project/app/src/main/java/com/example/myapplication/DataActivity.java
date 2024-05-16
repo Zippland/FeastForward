@@ -82,6 +82,11 @@ public class DataActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    /**
+     * calendar view
+     *
+     * @author Zihan Jian u7174903
+     */
     private void showDatePickerDialog(final TextView display) {
         final Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
